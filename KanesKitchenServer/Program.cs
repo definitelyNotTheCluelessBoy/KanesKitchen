@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using KanesKitchenServer.Data;
+using KanesKitchenServer.Repositories;
+using KanesKitchenServer.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); // Ensure this line is correctly formatted
 });
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 

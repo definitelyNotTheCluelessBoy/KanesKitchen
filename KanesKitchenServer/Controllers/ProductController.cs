@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KanesKitchenServer.Data;
+using KanesKitchenServer.DTOs.EShop;
+using KanesKitchenServer.Interfaces;
+using KanesKitchenServer.Mapping;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
 
 namespace KanesKitchenServer.Controllers
 {
@@ -7,11 +13,69 @@ namespace KanesKitchenServer.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
-        {
+        private readonly AppDBContext _context;
+        private readonly IProductRepository _productRepository;
 
-            return Ok("This is the response from ProductController");
+        public ProductController(AppDBContext context, IProductRepository productRepository)
+        {
+            _context = context;
+            _productRepository = productRepository;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var products = await _productRepository.GetAllAsync();
+            var productsDto = products.Select(product => product.ProductToDto());
+
+            return Ok(productsDto);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product.ProductToDto());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateProductDto createDto)
+        {
+            var product = createDto.CreateProductDtoToProduct();
+            await _productRepository.CreateProductAsync(product);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + product.Id, product);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductDto updateDto)
+        {
+            var product = await _productRepository.UpdateProductAsync(id, updateDto);
+            
+            if (product == null)
+            {
+                return NotFound();
+            }
+            
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var product = await _productRepository.DeleteProductAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            
+            return NoContent();
         }
     }
 }
