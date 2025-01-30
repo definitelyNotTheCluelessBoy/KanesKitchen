@@ -1,8 +1,13 @@
-﻿namespace KanesKitchenServer.Models
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace KanesKitchenServer.Models
 {
     public class Roles
     {
-        int Id { get; set; }
-        string Role { get; set; }
+        
+        [Key]
+        public int Id { get; set; }
+        public string Role { get; set; }
     }
 }
