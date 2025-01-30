@@ -5,7 +5,7 @@
 namespace KanesKitchenServer.Migrations
 {
     /// <inheritdoc />
-    public partial class mssqllocal_migration_985 : Migration
+    public partial class mssqllocal_migration_633 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

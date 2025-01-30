@@ -55,11 +55,28 @@ namespace KanesKitchenServer.Repositories
                 return null;
             }
 
-            product.ProductName = productDto.ProductName;
-            product.ProductDescription = productDto.ProductDescription;
-            product.ProductCategory = productDto.ProductCategory;
-            product.ProductPrice = productDto.ProductPrice;
-            product.ProductImage = productDto.ProductImage;
+            if (productDto.ProductName != null)
+            {
+                product.ProductName = productDto.ProductName;
+            }
+
+            if (productDto.ProductDescription != null)
+            {
+                product.ProductDescription = productDto.ProductDescription;
+            }
+            if (productDto.ProductCategoryId != null)
+            {
+                product.ProductCategoryId = (int)productDto.ProductCategoryId;
+            }
+            if (productDto.ProductPrice != null)
+            {
+                product.ProductPrice = (double)productDto.ProductPrice;
+            }
+            if (productDto.ProductImage != null)
+            {
+                product.ProductImage = productDto.ProductImage;
+            }
+
             await _context.SaveChangesAsync();
             return product;
         }

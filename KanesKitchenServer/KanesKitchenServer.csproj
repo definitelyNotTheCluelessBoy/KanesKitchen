@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>b29473a2-c72a-4519-a417-d00e2acc4030</UserSecretsId>
+	<InvariantGlobalization> false </InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Users\" />
-    <Folder Include="Responses\" />
+    <Folder Include="DTOs\Blog\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

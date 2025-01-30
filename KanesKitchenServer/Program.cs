@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using KanesKitchenServer.Data;
 using KanesKitchenServer.Repositories;
 using KanesKitchenServer.Interfaces;
+using KanesKitchenServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +16,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); // Ensure this line is correctly formatted
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<IUserManagment, UserManagmentRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+
+builder.Services.Configure<JwtSelection>(builder.Configuration.GetSection("JwtSelection"));
 
 var app = builder.Build();
 

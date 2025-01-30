@@ -12,7 +12,7 @@ namespace KanesKitchenServer.Mapping
                 Id = product.Id,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
-                ProductCategory = product.ProductCategory,
+                ProductCategoryId = product.ProductCategoryId,
                 ProductPrice = product.ProductPrice,
                 ProductImage = product.ProductImage
             };
@@ -23,7 +23,7 @@ namespace KanesKitchenServer.Mapping
             {
                 ProductName = createDto.ProductName,
                 ProductDescription = createDto.ProductDescription,
-                ProductCategory = createDto.ProductCategory,
+                ProductCategoryId = createDto.ProductCategoryId,
                 ProductPrice = createDto.ProductPrice,
                 ProductImage = createDto.ProductImage
             };

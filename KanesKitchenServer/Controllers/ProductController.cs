@@ -13,12 +13,11 @@ namespace KanesKitchenServer.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        
         private readonly IProductRepository _productRepository;
 
-        public ProductController(AppDBContext context, IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository)
         {
-            _context = context;
             _productRepository = productRepository;
         }
 

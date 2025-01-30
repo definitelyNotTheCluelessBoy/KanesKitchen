@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KanesKitchenServer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250115213732_mssql.local_migration_159")]
-    partial class mssqllocal_migration_159
+    [Migration("20250130210744_mssql.local_migration_633")]
+    partial class mssqllocal_migration_633
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
