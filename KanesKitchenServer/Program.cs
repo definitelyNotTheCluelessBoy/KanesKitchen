@@ -23,7 +23,7 @@ builder.Services.AddScoped<IUserManagment, UserManagmentRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
-builder.Services.Configure<JwtSelection>(builder.Configuration.GetSection("JwtSelection"));
+builder.Services.Configure<JwtSelection>(builder.Configuration.GetSection("JwtSection"));
 
 var app = builder.Build();
 

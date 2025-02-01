@@ -13,5 +13,7 @@ namespace KanesKitchenServer.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

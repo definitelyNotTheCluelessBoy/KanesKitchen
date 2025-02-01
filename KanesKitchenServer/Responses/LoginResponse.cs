@@ -1,5 +1,5 @@
 ﻿namespace KanesKitchenServer.Responses
 {
-    public record LoginResponse(bool Success, string Message, string Token, string RefreshToken);
+    public record LoginResponse(bool Success, string Message = null!, string Token = null!, string RefreshToken = null!);
 
 }

@@ -81,6 +81,26 @@ namespace KanesKitchenServer.Migrations
                     b.ToTable("ProductCategories");
                 });
 
+            modelBuilder.Entity("KanesKitchenServer.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("KanesKitchenServer.Models.Roles", b =>
                 {
                     b.Property<int>("Id")
