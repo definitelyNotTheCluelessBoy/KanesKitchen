@@ -1,4 +1,4 @@
-﻿namespace KanesKitchenServer.DTOs.Users
+﻿namespace SharedLibrary.DTOs.Users
 {
     public class RefreshTokenDto
     {

@@ -1,8 +1,8 @@
 ﻿using KanesKitchenServer.Data;
-using KanesKitchenServer.DTOs.EShop;
+using SharedLibrary.DTOs.EShop;
 using KanesKitchenServer.Interfaces;
-using KanesKitchenServer.Models;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Models.Eshop;
 
 namespace KanesKitchenServer.Repositories
 {

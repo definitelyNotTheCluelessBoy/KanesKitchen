@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KanesKitchenServer.Models
+namespace SharedLibrary.Models.Users
 {
     public class RefreshToken
     {

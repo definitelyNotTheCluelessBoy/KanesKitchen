@@ -1,5 +1,5 @@
-﻿using KanesKitchenServer.DTOs.EShop;
-using KanesKitchenServer.Models;
+﻿using SharedLibrary.DTOs.EShop;
+using SharedLibrary.Models.Eshop;
 
 namespace KanesKitchenServer.Interfaces
 {

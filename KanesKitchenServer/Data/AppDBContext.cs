@@ -1,5 +1,6 @@
-﻿using KanesKitchenServer.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Models.Eshop;
+using SharedLibrary.Models.Users;
 
 namespace KanesKitchenServer.Data
 {

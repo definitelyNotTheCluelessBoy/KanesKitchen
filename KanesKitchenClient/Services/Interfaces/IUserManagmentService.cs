@@ -1,13 +1,12 @@
 ﻿using SharedLibrary.DTOs.Users;
-using SharedLibrary.Models;
 using SharedLibrary.Responses;
 
-namespace KanesKitchenServer.Interfaces
+namespace KanesKitchenClient.Services.Interfaces
 {
-    public interface IUserManagment
+    public interface IUserManagmentService
     {
         Task<GeneralResponse> RegisterAsync(RegisterDto registerDto);
-        Task<LoginResponse> LoginAsync (LoginDto loginDto);
+        Task<LoginResponse> LoginAsync(LoginDto loginRequest);
         Task<LoginResponse> LoginViaRefreshTokenAsync(RefreshTokenDto refreshTokenDto);
 
     }

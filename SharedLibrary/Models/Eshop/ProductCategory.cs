@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KanesKitchenServer.Models
+namespace SharedLibrary.Models.Eshop
 {
     public class ProductCategory
     {

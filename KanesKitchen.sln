@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanesKitchenServer", "KanesKitchenServer\KanesKitchenServer.csproj", "{EA345CFE-518F-4695-B6CF-B7D5C07A1344}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanesKitchenClient", "KanesKitchenClient\KanesKitchenClient.csproj", "{E595F13B-B55C-4C5A-A26E-FFE18322E351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanesKitchenClient", "KanesKitchenClient\KanesKitchenClient.csproj", "{E595F13B-B55C-4C5A-A26E-FFE18322E351}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{5B09442E-A7A7-4BDC-8A95-6046B5D6DDF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E595F13B-B55C-4C5A-A26E-FFE18322E351}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E595F13B-B55C-4C5A-A26E-FFE18322E351}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E595F13B-B55C-4C5A-A26E-FFE18322E351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B09442E-A7A7-4BDC-8A95-6046B5D6DDF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B09442E-A7A7-4BDC-8A95-6046B5D6DDF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B09442E-A7A7-4BDC-8A95-6046B5D6DDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B09442E-A7A7-4BDC-8A95-6046B5D6DDF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

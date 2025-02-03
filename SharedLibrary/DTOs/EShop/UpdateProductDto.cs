@@ -1,4 +1,4 @@
-﻿namespace KanesKitchenServer.DTOs.EShop
+﻿namespace SharedLibrary.DTOs.EShop
 {
     public class UpdateProductDto
     {

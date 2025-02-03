@@ -8,3 +8,11 @@
 @using Microsoft.JSInterop
 @using KanesKitchenClient
 @using KanesKitchenClient.Layout
+@using KanesKitchenClient.Services
+@using KanesKitchenClient.Services.Interfaces
+@using Microsoft.AspNetCore.Components.Authorization
+@using SharedLibrary.DTOs.Users
+
+@inject AuthenticationStateProvider AuthicationStateProvider
+@inject IUserManagmentService UserManagmentService
+@inject NavigationManager NavManager

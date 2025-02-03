@@ -1,8 +1,7 @@
 ﻿using KanesKitchenServer.Data;
-using KanesKitchenServer.DTOs.Users;
+using SharedLibrary.DTOs.Users;
 using KanesKitchenServer.Interfaces;
-using KanesKitchenServer.Models;
-using KanesKitchenServer.Responses;
+using SharedLibrary.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -11,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using SharedLibrary.Models.Users;
 
 namespace KanesKitchenServer.Repositories
 {
@@ -119,10 +119,10 @@ namespace KanesKitchenServer.Repositories
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var userClaims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Role, role),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
             var token = new JwtSecurityToken(

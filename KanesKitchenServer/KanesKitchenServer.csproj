@@ -23,8 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Blog\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
 </Project>

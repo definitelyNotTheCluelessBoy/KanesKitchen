@@ -1,6 +1,6 @@
-﻿using KanesKitchenServer.DTOs.Users;
+﻿using SharedLibrary.DTOs.Users;
 using KanesKitchenServer.Interfaces;
-using KanesKitchenServer.Models;
+using SharedLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KanesKitchenServer.Controllers

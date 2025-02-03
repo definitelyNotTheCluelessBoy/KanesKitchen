@@ -1,7 +1,7 @@
 ﻿using KanesKitchenServer.Data;
-using KanesKitchenServer.DTOs.EShop;
+using SharedLibrary.DTOs.EShop;
 using KanesKitchenServer.Interfaces;
-using KanesKitchenServer.Mapping;
+using SharedLibrary.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

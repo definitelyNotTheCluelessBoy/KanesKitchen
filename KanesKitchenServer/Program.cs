@@ -3,6 +3,9 @@ using KanesKitchenServer.Data;
 using KanesKitchenServer.Repositories;
 using KanesKitchenServer.Interfaces;
 using KanesKitchenServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,35 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 builder.Services.Configure<JwtSelection>(builder.Configuration.GetSection("JwtSection"));
+var jwtSelection = builder.Configuration.GetSection(nameof(JwtSelection)).Get<JwtSelection>();
+
+builder.Services.AddAuthentication(options =>
+{
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSelection!.Issuer,
+        ValidAudience = jwtSelection.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSelection.Key))
+    };
+});
+
+builder.Services.AddCors( options =>
+{
+options.AddPolicy("AllowBlazorClientAcces",
+    builder => builder
+    .WithOrigins("https://localhost:7048")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
 
 var app = builder.Build();
 
@@ -35,9 +67,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowBlazorClientAcces");
 
 app.Run();

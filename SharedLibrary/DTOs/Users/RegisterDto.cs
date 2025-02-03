@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KanesKitchenServer.DTOs.Users
+namespace SharedLibrary.DTOs.Users
 {
     public class RegisterDto
     {

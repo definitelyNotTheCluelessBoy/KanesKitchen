@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace KanesKitchenServer.Models
+namespace SharedLibrary.Models.Eshop
 {
     public class Product
     {

@@ -1,7 +1,7 @@
-﻿using KanesKitchenServer.DTOs.EShop;
-using KanesKitchenServer.Models;
+﻿using SharedLibrary.DTOs.EShop;
+using SharedLibrary.Models.Eshop;
 
-namespace KanesKitchenServer.Mapping
+namespace SharedLibrary.Mapping
 {
     public static class EShopMappers
     {
