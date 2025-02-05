@@ -29,7 +29,13 @@ namespace KanesKitchenClient.Services.Implementations
 
         public async Task<LoginResponse> LoginViaRefreshTokenAsync(RefreshTokenDto refreshTokenDto)
         {
-            throw new NotImplementedException();
+            var httpClient = _httpClient.GetPublicHttpClient().Result;
+            var response = await httpClient.PostAsJsonAsync($"{UserManagmentServiceRoute}/loginViaRefreshToken", refreshTokenDto);
+            if (!response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<LoginResponse>();
+            };
+            return await response.Content.ReadFromJsonAsync<LoginResponse>();
         }
 
         public async Task<GeneralResponse> RegisterAsync(RegisterDto registerDto)

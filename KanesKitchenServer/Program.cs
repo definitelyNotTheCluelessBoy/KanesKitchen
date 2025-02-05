@@ -27,7 +27,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 builder.Services.Configure<JwtSelection>(builder.Configuration.GetSection("JwtSection"));
-var jwtSelection = builder.Configuration.GetSection(nameof(JwtSelection)).Get<JwtSelection>();
+var jwtSelection = builder.Configuration.GetSection("JwtSection").Get<JwtSelection>();
 
 builder.Services.AddAuthentication(options =>
 {

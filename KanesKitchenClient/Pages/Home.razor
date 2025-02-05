@@ -1,7 +1,18 @@
 ﻿@page "/"
 
 <PageTitle>Home</PageTitle>
+<AuthorizeView Roles="User, Admin">
+    <Authorized>
+        <p>User: @context.User.Identity.Name </p>
+        <AuthorizeView Roles="User" Context="innerContext">
+            <p>You have 'User' role claims.</p>
+        </AuthorizeView>
+        <AuthorizeView Roles="Admin" Context="innerContext">
+            <p>You have 'Admin' role claims.</p>
+        </AuthorizeView>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized to view this content.</p>
+    </NotAuthorized>
+</AuthorizeView>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.

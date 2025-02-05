@@ -1,0 +1,67 @@
+﻿@page "/account/register"
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <EditForm Model="RegisterDto" OnValidSubmit="HandleRegistration">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="card">
+                    <div class="card-header">Fill this form to Register</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">User name</label>
+                            <InputText @bind-Value="RegisterDto.UserName" class="form-control"></InputText>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label class="form-label">Email</label>
+                            <InputText @bind-Value="RegisterDto.Email" class="form-control"></InputText>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" @bind="RegisterDto.Password" class="form-control" />
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" @bind="RegisterDto.ConfirmPassword" class="form-control" />
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <button class="btn btn-outline-primary float-end" type="submit">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    RegisterDto RegisterDto = new();
+    async Task HandleRegistration()
+    {
+        var apiRegisterResponse = await UserManagmentService.RegisterAsync(RegisterDto);
+        if (apiRegisterResponse.Success)
+        {
+            var apiLoginResponse = await UserManagmentService.LoginAsync(new LoginDto
+            {
+                UserName = RegisterDto.UserName,
+                Password = RegisterDto.Password
+            });
+            var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthicationStateProvider;
+            await customAuthenticationStateProvider.UpdateAuthenticationState(
+                new Session
+                    {
+                        Token = apiLoginResponse.Token,
+                        RefreshToken = apiLoginResponse.RefreshToken
+                    });
+            NavManager.NavigateTo("/", forceLoad: true);
+        }
+    }
+}
+
+

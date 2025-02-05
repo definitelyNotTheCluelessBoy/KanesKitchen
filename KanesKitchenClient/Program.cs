@@ -14,10 +14,13 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddHttpClient("ApiClient", client => client.BaseAddress = new Uri("https://localhost:7047"));
+builder.Services.AddTransient<CustomHttpHandler>();
+builder.Services.AddHttpClient("ApiClient",
+    client => client.BaseAddress = new Uri("https://localhost:7047")).AddHttpMessageHandler<CustomHttpHandler>();
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7047") });
 builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<GetHttpClient>();
+builder.Services.AddScoped<Session>();
 builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserManagmentService, UserManagmentService>();
