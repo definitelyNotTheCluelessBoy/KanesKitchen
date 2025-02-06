@@ -1,18 +1,21 @@
 ﻿@page "/"
+@using KanesKitchenClient.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<HomeResource> resource
 
 <PageTitle>Home</PageTitle>
 <AuthorizeView Roles="User, Admin">
     <Authorized>
-        <p>User: @context.User.Identity.Name </p>
+        <p>@resource["Name"]: @context.User.Identity.Name </p>
         <AuthorizeView Roles="User" Context="innerContext">
-            <p>You have 'User' role claims.</p>
+            <p>@resource["UserMessage"]</p>
         </AuthorizeView>
         <AuthorizeView Roles="Admin" Context="innerContext">
-            <p>You have 'Admin' role claims.</p>
+            <p>@resource["AdminMessage"]</p>
         </AuthorizeView>
     </Authorized>
     <NotAuthorized>
-        <p>You are not authorized to view this content.</p>
+        <p>@resource["UnauthorizedMessage"]</p>
     </NotAuthorized>
 </AuthorizeView>
 

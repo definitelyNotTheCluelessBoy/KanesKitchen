@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KanesKitchenClient</title>
@@ -13,6 +14,18 @@
 </head>
 
 <body>
+    <script>
+        window.blazorCulture = {
+            get: function () {
+                return localStorage.getItem('BlazorCulture');
+            },
+            set: function (value) {
+                localStorage.setItem('BlazorCulture', value);
+            }
+        };
+    </script>
+    <script src="_framework/blazor.webassembly.js"></script>
+
     <div id="app">
         <svg class="loading-progress">
             <circle r="40%" cx="50%" cy="50%" />
@@ -26,7 +39,6 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,7 @@
 using Blazored.LocalStorage;
 using KanesKitchenClient;
+using System.Globalization;
+using Microsoft.JSInterop;
 using KanesKitchenClient.Services;
 using KanesKitchenClient.Services.Implementations;
 using KanesKitchenClient.Services.Interfaces;
@@ -25,4 +27,23 @@ builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserManagmentService, UserManagmentService>();
 
-await builder.Build().RunAsync();
+builder.Services.AddLocalization();
+
+var host = builder.Build();
+
+const string defaultCulture = "en-Uk";
+
+var js = host.Services.GetRequiredService<IJSRuntime>();
+
+var result = await js.InvokeAsync<string>("blazorCulture.get");
+var culture = CultureInfo.GetCultureInfo(result ?? defaultCulture);
+
+if (result == null)
+{
+    await js.InvokeVoidAsync("blazorCulture.set", defaultCulture);
+}
+
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+await host.RunAsync();
