@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SharedLibrary.Models.Eshop
 {
@@ -6,8 +7,9 @@ namespace SharedLibrary.Models.Eshop
     {
         [Key]
         public int Id { get; set; }
-        public string CategoryName { get; set; }
-        public string CategoryNameSvk { get; set; }
-
+        public string? CategoryName { get; set; }
+        public string? CategoryNameSvk { get; set; }
+        [JsonIgnore]
+        public List<Product>? Products { get; set; }
     }
 }

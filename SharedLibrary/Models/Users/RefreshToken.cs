@@ -7,7 +7,7 @@ namespace SharedLibrary.Models.Users
     {
         [Key]
         public int Id { get; set; }
-        public string Token { get; set; }
+        public string? Token { get; set; }
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
     }

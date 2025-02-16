@@ -72,10 +72,7 @@ namespace KanesKitchenServer.Repositories
             {
                 product.ProductPrice = (double)productDto.ProductPrice;
             }
-            if (productDto.ProductImage != null)
-            {
-                product.ProductImage = productDto.ProductImage;
-            }
+            
 
             await _context.SaveChangesAsync();
             return product;

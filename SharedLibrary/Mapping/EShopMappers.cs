@@ -14,7 +14,6 @@ namespace SharedLibrary.Mapping
                 ProductDescription = product.ProductDescription,
                 ProductCategoryId = product.ProductCategoryId,
                 ProductPrice = product.ProductPrice,
-                ProductImage = product.ProductImage
             };
         }
         public static Product CreateProductDtoToProduct(this CreateProductDto createDto)
@@ -25,7 +24,6 @@ namespace SharedLibrary.Mapping
                 ProductDescription = createDto.ProductDescription,
                 ProductCategoryId = createDto.ProductCategoryId,
                 ProductPrice = createDto.ProductPrice,
-                ProductImage = createDto.ProductImage
             };
         }
     }
