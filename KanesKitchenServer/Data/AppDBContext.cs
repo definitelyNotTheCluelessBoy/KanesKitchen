@@ -26,25 +26,6 @@ namespace KanesKitchenServer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder )
         {
-            /*
-            modelBuilder.Entity<ProductCategory>().HasData(
-                               new ProductCategory { Id = 1, CategoryName = "Food", CategoryNameSvk = "Jedlo" },
-                                              new ProductCategory { Id = 2, CategoryName = "Drinks", CategoryNameSvk = "Napoje" }
-                                                         );
-
-            modelBuilder.Entity<Product>().HasData(
-                               new Product { Id = 1, ProductName = "Pizza", ProductNameSvk = "Pizza", ProductDescription = "Tasty pizza", ProductDescriptionSvk = "Chutná pizza", ProductPrice = 5.99, ProductStock = 100, ProductCategoryId = 1 },
-                                              new Product { Id = 2, ProductName = "Cola", ProductNameSvk = "Cola", ProductDescription = "Cold cola", ProductDescriptionSvk = "Ľadová cola", ProductPrice = 1.99, ProductStock = 200, ProductCategoryId = 2 }
-                                                         );
-
-            modelBuilder.Entity<Roles>().HasData(
-                               new Roles { Id = 1, Role = "Admin" },
-                                              new Roles { Id = 2, Role = "User" }
-                                                         );
-
-            modelBuilder.Entity<User>().HasData(
-                               new User { Id = 1, Email = ""})
-            */
 
             base.OnModelCreating(modelBuilder);
 

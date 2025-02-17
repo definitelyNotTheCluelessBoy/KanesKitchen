@@ -8,6 +8,6 @@
         public string? ProductDescriptionSvk { get; set; }
         public int? ProductCategoryId { get; set; }
         public double? ProductPrice { get; set; }
-        public string? ProductImage { get; set; }
+        public int? ProductStock { get; set; }
     }
 }

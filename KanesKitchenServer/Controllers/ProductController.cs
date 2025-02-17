@@ -21,24 +21,23 @@ namespace KanesKitchenServer.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("{language}")]
+        public async Task<IActionResult> Get([FromRoute] string language)
         {
             var products = await _productRepository.GetAllAsync();
-            var productsDto = products.Select(product => product.ProductToDto());
-
+            var productsDto = products.Select(product => product.ProductToDto(language));
             return Ok(productsDto);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] int id)
+        [HttpGet("{id}/{language}")]
+        public async Task<IActionResult> Get([FromRoute] int id, [FromRoute] string language)
         {
             var product = await _productRepository.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
-            return Ok(product.ProductToDto());
+            return Ok(product.ProductToDto(language));
         }
 
         [HttpPost]

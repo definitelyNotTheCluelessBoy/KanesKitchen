@@ -1,5 +1,6 @@
 ﻿using KanesKitchenServer.Data;
 using SharedLibrary.DTOs.EShop;
+using SharedLibrary.Mapping;
 using KanesKitchenServer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Models.Eshop;
@@ -38,7 +39,8 @@ namespace KanesKitchenServer.Repositories
 
         public async Task<List<Product>> GetAllAsync()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _context.Products.ToListAsync();
+            return products;
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)
@@ -55,24 +57,7 @@ namespace KanesKitchenServer.Repositories
                 return null;
             }
 
-            if (productDto.ProductName != null)
-            {
-                product.ProductName = productDto.ProductName;
-            }
-
-            if (productDto.ProductDescription != null)
-            {
-                product.ProductDescription = productDto.ProductDescription;
-            }
-            if (productDto.ProductCategoryId != null)
-            {
-                product.ProductCategoryId = (int)productDto.ProductCategoryId;
-            }
-            if (productDto.ProductPrice != null)
-            {
-                product.ProductPrice = (double)productDto.ProductPrice;
-            }
-            
+            product.UpdateProductWithDto(productDto);
 
             await _context.SaveChangesAsync();
             return product;
