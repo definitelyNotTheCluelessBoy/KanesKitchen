@@ -19,6 +19,8 @@ namespace SharedLibrary.Mapping
                     ProductDescription = product.ProductDescriptionSvk,
                     ProductCategoryId = product.ProductCategoryId,
                     ProductPrice = product.ProductPrice,
+                    ProductCategory = product.ProductCategory != null ? product.ProductCategory.CategoryNameSvk : null,
+                    Images =  product.Images != null ? product.Images.Select(i => i.ImageUrl).ToList() : new List<string>()
                 };
             }
             else
@@ -30,20 +32,10 @@ namespace SharedLibrary.Mapping
                     ProductDescription = product.ProductDescription,
                     ProductCategoryId = product.ProductCategoryId,
                     ProductPrice = product.ProductPrice,
+                    ProductCategory = product.ProductCategory != null ? product.ProductCategory.CategoryName : null,
+                    Images = product.Images != null ? product.Images.Select(i => i.ImageUrl).ToList() : new List<string>()
                 };
             }
-        }
-
-        public static void UpdateProductWithDto(this Product product, UpdateProductDto productDto)
-        {
-            if (productDto.ProductName != null) product.ProductName = productDto.ProductName;
-            if (productDto.ProductNameSvk != null) product.ProductNameSvk = productDto.ProductNameSvk;
-            if (productDto.ProductDescription != null) product.ProductDescription = productDto.ProductDescription;
-            if (productDto.ProductDescriptionSvk != null) product.ProductDescriptionSvk = productDto.ProductDescriptionSvk;
-            if (productDto.ProductCategoryId != null) product.ProductCategoryId = (int)productDto.ProductCategoryId;
-            if (productDto.ProductPrice != null) product.ProductPrice = (double)productDto.ProductPrice;
-            if (productDto.ProductStock != null) product.ProductStock = (int)productDto.ProductStock;
-
         }
 
         public static Product CreateProductDtoToProduct(this CreateProductDto createDto)
@@ -57,6 +49,15 @@ namespace SharedLibrary.Mapping
                 ProductCategoryId = createDto.ProductCategoryId,
                 ProductPrice = createDto.ProductPrice,
                 ProductStock = createDto.ProductStock
+            };
+        }
+
+        public static ProductCategory CreateCategoryDTOtoCategory(this CreateProductCategoryDto updateDto)
+        {
+            return new ProductCategory
+            {
+                CategoryName = updateDto.Name,
+                CategoryNameSvk = updateDto.NameSvk
             };
         }
     }

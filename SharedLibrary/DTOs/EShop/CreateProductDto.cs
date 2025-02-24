@@ -9,5 +9,6 @@
         public int ProductCategoryId { get; set; }
         public double ProductPrice { get; set; }
         public int ProductStock { get; set; }
+        public List<string> Images { get; set; }
     }
 }

@@ -4,6 +4,8 @@ using SharedLibrary.Mapping;
 using KanesKitchenServer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Models.Eshop;
+using SharedLibrary.Responses;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KanesKitchenServer.Repositories
 {
@@ -16,51 +18,74 @@ namespace KanesKitchenServer.Repositories
             _context = context;
         }
 
-        public async Task<Product> CreateProductAsync(Product product)
+        public async Task<GeneralResponse> CreateProductAsync(CreateProductDto productDto)
         {
-            await _context.Products.AddAsync(product);
+            var savedProduct = await _context.Products.AddAsync(productDto.CreateProductDtoToProduct());
             await _context.SaveChangesAsync();
-            return product;
+            
+            foreach (var image in productDto.Images)
+            {
+                await _context.Images.AddAsync(new Image { ImageUrl = image, ProductId = savedProduct.Entity.Id });
+            }
+            await _context.SaveChangesAsync();
+            
+            return new GeneralResponse(true,"Product created.");
         }
 
-        public async Task<Product?> DeleteProductAsync(int Id)
+        public async Task<GeneralResponse> DeleteProductAsync(int Id)
         {
-            var product = await _context.Products.FindAsync(Id);
+            var images = _context.Images.Where(i => i.ProductId == Id);
+            if (!images.IsNullOrEmpty())
+            {
+                _context.Images.RemoveRange(images);
+            }
             
+            var product = await _context.Products.FindAsync(Id);
             if (product == null)
             {
-                return null;
+                return new GeneralResponse(true, "Product not found.");
             }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
-            return product;
+            return new GeneralResponse(true, "Product removed.");
         }
 
         public async Task<List<Product>> GetAllAsync()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products.Include(p => p.Images)
+                .Include(p => p.ProductCategory)
+                .ToListAsync();
             return products;
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products.Include(p => p.Images)
+                .Include(p => p.ProductCategory)
+                .SingleOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<Product?> UpdateProductAsync(int Id, UpdateProductDto productDto)
+        public async Task<GeneralResponse> UpdateProductAsync(int Id, UpdateProductDto productDto)
         {
             var product = await _context.Products.FindAsync(Id);
 
             if (product == null)
             {
-                return null;
+                return new GeneralResponse(true, "Product not found.");
             }
 
-            product.UpdateProductWithDto(productDto);
+            if (productDto.ProductName != null) product.ProductName = productDto.ProductName;
+            if (productDto.ProductNameSvk != null) product.ProductNameSvk = productDto.ProductNameSvk;
+            if (productDto.ProductDescription != null) product.ProductDescription = productDto.ProductDescription;
+            if (productDto.ProductDescriptionSvk != null) product.ProductDescriptionSvk = productDto.ProductDescriptionSvk;
+            if (productDto.ProductCategoryId != null) product.ProductCategoryId = (int)productDto.ProductCategoryId;
+            if (productDto.ProductPrice != null) product.ProductPrice = (double)productDto.ProductPrice;
+            if (productDto.ProductStock != null) product.ProductStock = (int)productDto.ProductStock;
 
             await _context.SaveChangesAsync();
-            return product;
+            return new GeneralResponse(true, "Product updated.");
         }
+
     }
 }

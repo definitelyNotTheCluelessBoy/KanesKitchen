@@ -1,5 +1,6 @@
 ﻿using SharedLibrary.DTOs.EShop;
 using SharedLibrary.Models.Eshop;
+using SharedLibrary.Responses;
 
 namespace KanesKitchenServer.Interfaces
 {
@@ -7,8 +8,8 @@ namespace KanesKitchenServer.Interfaces
     {
         Task<List<Product>> GetAllAsync();
         Task<Product?> GetProductByIdAsync(int id);
-        Task<Product> CreateProductAsync(Product product);
-        Task<Product?> UpdateProductAsync(int Id, UpdateProductDto productDto);
-        Task<Product?> DeleteProductAsync(int Id);
+        Task<GeneralResponse> CreateProductAsync(CreateProductDto productDto);
+        Task<GeneralResponse> UpdateProductAsync(int Id, UpdateProductDto productDto);
+        Task<GeneralResponse> DeleteProductAsync(int Id);
     }
 }

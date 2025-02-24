@@ -1,11 +1,8 @@
-﻿using KanesKitchenServer.Data;
-using SharedLibrary.DTOs.EShop;
+﻿using SharedLibrary.DTOs.EShop;
 using KanesKitchenServer.Interfaces;
 using SharedLibrary.Mapping;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
+
 
 namespace KanesKitchenServer.Controllers
 {
@@ -22,7 +19,7 @@ namespace KanesKitchenServer.Controllers
         }
 
         [HttpGet("{language}")]
-        public async Task<IActionResult> Get([FromRoute] string language)
+        public async Task<IActionResult> GetAll([FromRoute] string language)
         {
             var products = await _productRepository.GetAllAsync();
             var productsDto = products.Select(product => product.ProductToDto(language));
@@ -30,7 +27,7 @@ namespace KanesKitchenServer.Controllers
         }
 
         [HttpGet("{id}/{language}")]
-        public async Task<IActionResult> Get([FromRoute] int id, [FromRoute] string language)
+        public async Task<IActionResult> GetById([FromRoute] int id, [FromRoute] string language)
         {
             var product = await _productRepository.GetProductByIdAsync(id);
             if (product == null)
@@ -43,37 +40,37 @@ namespace KanesKitchenServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductDto createDto)
         {
-            var product = createDto.CreateProductDtoToProduct();
-            await _productRepository.CreateProductAsync(product);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + product.Id, product);
+            var response = await _productRepository.CreateProductAsync(createDto);
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+            return Ok(response.Message);
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductDto updateDto)
         {
-            var product = await _productRepository.UpdateProductAsync(id, updateDto);
-            
-            if (product == null)
+            var response = await _productRepository.UpdateProductAsync(id, updateDto);
+
+            if (!response.Success)
             {
-                return NotFound();
+                return BadRequest(response.Message);
             }
-            
-            return NoContent();
+            return Ok(response.Message);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var product = await _productRepository.DeleteProductAsync(id);
-
-            if (product == null)
+            var response = await _productRepository.DeleteProductAsync(id);
+            if (!response.Success)
             {
-                return NotFound();
+                return BadRequest(response.Message);
             }
-            
-            return NoContent();
+            return Ok(response.Message);
         }
     }
 }

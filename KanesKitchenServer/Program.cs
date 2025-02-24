@@ -24,6 +24,9 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 
 builder.Services.AddScoped<IUserManagment, UserManagmentRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 
 builder.Services.Configure<JwtSelection>(builder.Configuration.GetSection("JwtSection"));
