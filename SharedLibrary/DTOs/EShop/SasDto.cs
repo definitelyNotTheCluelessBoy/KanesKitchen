@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.DTOs.EShop
 {
-    public class CreateProductCategoryDto
+    public class SasDto
     {
-        public string Name { get; set; }
-        public string NameSvk { get; set; }
+        public string ContainerUrl { get; set; }
+        public string SasToken { get; set; }
     }
 }

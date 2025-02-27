@@ -1,0 +1,86 @@
+﻿@page "/upload"
+@using Microsoft.AspNetCore.Components.Forms
+@using Azure.Storage.Blobs
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.Processing
+@using SixLabors.ImageSharp.Formats.Jpeg
+
+
+<h3>Image Upload</h3>
+
+<InputFile OnChange="HandleFileSelected" multiple="false" />
+
+@if (!string.IsNullOrEmpty(_uploadMessage))
+{
+    <p>@_uploadMessage</p>
+}
+
+@code {
+    private string _uploadMessage = "";
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        // Let's limit the input file size to 5 MB as an example
+        long maxFileSize = 5 * 1024 * 1024;
+        if (file.Size > maxFileSize)
+        {
+            _uploadMessage = "File too large (max 5 MB).";
+            return;
+        }
+
+        // Read the file into memory
+        using var originalStream = file.OpenReadStream(maxFileSize);
+        using var inMemoryStream = new MemoryStream();
+        await originalStream.CopyToAsync(inMemoryStream);
+        inMemoryStream.Position = 0;
+
+        // Load the image with ImageSharp (no out param)
+        using var image = Image.Load(inMemoryStream);
+
+        // Example: resize to a max width of 800 px
+        image.Mutate(ctx =>
+        {
+            ctx.Resize(new ResizeOptions
+                {
+                    Mode = ResizeMode.Max,
+                    Size = new Size(800, 0)
+                });
+        });
+
+        // Save back to a MemoryStream in JPEG format
+        using var outputStream = new MemoryStream();
+        var encoder = new JpegEncoder { Quality = 75 };
+        image.Save(outputStream, encoder);
+        outputStream.Position = 0;
+
+        // Upload to Azure
+        try
+        {
+            // 1. Get SAS token + container URL from your backend
+            SasDto sasDto = await ImageService.GetSasTokenAsync();
+
+            // 2. Create the BlobServiceClient using the SAS
+            var blobServiceClient = new BlobServiceClient(new Uri($"{sasDto.ContainerUrl}?{sasDto.SasToken}"));
+            var containerClient = blobServiceClient.GetBlobContainerClient("");
+
+            // 3. Create a unique name for the blob
+            var blobName = $"{Guid.NewGuid()}.jpg";
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            // 4. Upload the processed image
+            await blobClient.UploadAsync(outputStream, overwrite: true);
+
+            // 5. URL of the uploaded blob
+            var finalUrl = blobClient.Uri.ToString();
+
+            // (Optional) Save the URL to your DB or display it
+            _uploadMessage = $"Uploaded OK! URL: {finalUrl}";
+        }
+        catch (Exception ex)
+        {
+            _uploadMessage = $"Error uploading: {ex.Message}";
+        }
+    }
+}

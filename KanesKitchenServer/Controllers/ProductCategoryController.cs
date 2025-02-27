@@ -1,8 +1,6 @@
 ﻿using KanesKitchenServer.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.DTOs.EShop;
-using SharedLibrary.Mapping.;
 
 namespace KanesKitchenServer.Controllers
 {

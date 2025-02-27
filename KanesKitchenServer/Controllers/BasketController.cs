@@ -18,8 +18,8 @@ namespace KanesKitchenServer.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetBasket([FromRoute] int userId)
         {
-            var basket = await _basketRepository.GetBasketAsync(userId);
-            return Ok(basket);
+            var baskets = await _basketRepository.GetBasketAsync(userId);
+            return Ok(baskets);
         }
 
         [HttpPost]

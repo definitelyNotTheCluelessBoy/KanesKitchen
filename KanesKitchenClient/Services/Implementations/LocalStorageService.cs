@@ -1,6 +1,4 @@
 ﻿using Blazored.LocalStorage;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography.X509Certificates;
 
 namespace KanesKitchenClient.Services.Implementations
 {
