@@ -73,7 +73,8 @@ namespace KanesKitchenServer.Controllers
             //  - Add:    Allows uploading of new blocks and metadata
             //  - Create: Allows creating new blobs
             //  - Write:  Allows writing to existing blobs
-            sasBuilder.SetPermissions(BlobContainerSasPermissions.Create |
+            sasBuilder.SetPermissions(BlobContainerSasPermissions.Read |
+                                      BlobContainerSasPermissions.Create |
                                       BlobContainerSasPermissions.Write |
                                       BlobContainerSasPermissions.Add);
 

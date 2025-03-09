@@ -1,86 +1,274 @@
-﻿@page "/upload"
+﻿@page "/create-product"
+
 @using Microsoft.AspNetCore.Components.Forms
 @using Azure.Storage.Blobs
 @using SixLabors.ImageSharp
 @using SixLabors.ImageSharp.Processing
 @using SixLabors.ImageSharp.Formats.Jpeg
 
+@inject NavigationManager NavigationManager
 
-<h3>Image Upload</h3>
+<h3 class="mb-4">Create New Product</h3>
 
-<InputFile OnChange="HandleFileSelected" multiple="false" />
+<!-- First card: Create Product -->
+<div class="card shadow-sm mb-4" style="max-width: 700px;">
+    <div class="card-body">
 
-@if (!string.IsNullOrEmpty(_uploadMessage))
+        <EditForm Model="_product" OnValidSubmit="HandleValidSubmit" class="row g-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+
+            <!-- Product Name -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Product Name</label>
+                <InputText @bind-Value="_product.ProductName" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Product Name (SVK)</label>
+                <InputText @bind-Value="_product.ProductNameSvk" class="form-control" />
+            </div>
+
+            <!-- Descriptions -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Description</label>
+                <InputTextArea @bind-Value="_product.ProductDescription" class="form-control" rows="3" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Description (SVK)</label>
+                <InputTextArea @bind-Value="_product.ProductDescriptionSvk" class="form-control" rows="3" />
+            </div>
+
+            <!-- Category Dropdown -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Category</label>
+                <InputSelect @bind-Value="_product.ProductCategoryId" class="form-select">
+                    <option value="">-- Choose Category --</option>
+                    @foreach (var cat in _categories)
+                    {
+                        <option value="@cat.Id">@cat.CategoryName (@cat.CategoryNameSvk)</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <!-- Price -->
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Price</label>
+                <InputNumber @bind-Value="_product.ProductPrice" class="form-control" />
+            </div>
+
+            <!-- Stock -->
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Stock</label>
+                <InputNumber @bind-Value="_product.ProductStock" class="form-control" />
+            </div>
+
+            <!-- File Input -->
+            <div class="col-12">
+                <label class="form-label fw-bold">Select Images</label>
+                <InputFile OnChange="HandleFilesSelected" multiple="true" class="form-control" />
+                <small class="text-muted">You can select multiple files (max 15 MB each).</small>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary">Submit Product</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_statusMessage))
 {
-    <p>@_uploadMessage</p>
+    <div class="alert alert-info">
+        <pre class="m-0">@_statusMessage</pre>
+    </div>
 }
 
+@if (_product.Images is not null && _product.Images.Count > 0)
+{
+    <h4>Uploaded Images</h4>
+    <div class="d-flex flex-wrap">
+        @foreach (var url in _product.Images)
+        {
+            <div class="m-2">
+                <img src="@url" style="max-width:800px;" class="img-thumbnail" />
+            </div>
+        }
+    </div>
+}
+
+<!-- Second card: Create Product Category -->
+<div class="card shadow-sm mb-4" style="max-width: 700px;">
+    <div class="card-body">
+        <h5>Create Product Category</h5>
+
+        <!-- Simple category form -->
+        <EditForm Model="_newCategory" OnValidSubmit="HandleCategorySubmit" class="row g-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Category Name (EN)</label>
+                <InputText @bind-Value="_newCategory.Name" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Category Name (SVK)</label>
+                <InputText @bind-Value="_newCategory.NameSvk" class="form-control" />
+            </div>
+
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-secondary">Create Category</button>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(_categoryStatusMessage))
+        {
+            <div class="alert alert-info mt-3">
+                @_categoryStatusMessage
+            </div>
+        }
+    </div>
+</div>
+
 @code {
-    private string _uploadMessage = "";
+    // (1) PRODUCT-FORM FIELDS
+    private CreateProductDto _product = new CreateProductDto();
+    private List<IBrowserFile> _selectedFiles = new();
+    private string _statusMessage;
+    private List<ProductCategory> _categories = new();
 
-    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    // (2) CATEGORY-FORM FIELDS
+    private CreateProductCategoryDto _newCategory = new CreateProductCategoryDto();
+    private string _categoryStatusMessage;
+
+    // Called once when the component is initialized
+    protected override async Task OnInitializedAsync()
     {
-        var file = e.File;
+        // Fetch existing categories for the product form
+        _categories = await ProductService.GetAllCategories();
+    }
 
-        // Let's limit the input file size to 5 MB as an example
-        long maxFileSize = 5 * 1024 * 1024;
-        if (file.Size > maxFileSize)
+    // Handling file selection for the product
+    private void HandleFilesSelected(InputFileChangeEventArgs e)
+    {
+        _selectedFiles = e.GetMultipleFiles().ToList();
+    }
+
+    // Submitting the product
+    private async Task HandleValidSubmit()
+    {
+        _statusMessage = "";
+
+        // Clear old images each submission
+        _product.Images.Clear();
+
+        if (_selectedFiles.Count == 0)
         {
-            _uploadMessage = "File too large (max 5 MB).";
-            return;
+            _statusMessage = "No images selected. Creating product with no images.\n";
         }
-
-        // Read the file into memory
-        using var originalStream = file.OpenReadStream(maxFileSize);
-        using var inMemoryStream = new MemoryStream();
-        await originalStream.CopyToAsync(inMemoryStream);
-        inMemoryStream.Position = 0;
-
-        // Load the image with ImageSharp (no out param)
-        using var image = Image.Load(inMemoryStream);
-
-        // Example: resize to a max width of 800 px
-        image.Mutate(ctx =>
+        else
         {
-            ctx.Resize(new ResizeOptions
+            foreach (var file in _selectedFiles)
+            {
+                try
                 {
-                    Mode = ResizeMode.Max,
-                    Size = new Size(800, 0)
-                });
-        });
+                    long maxFileSize = 15 * 1024 * 1024; // 15 MB limit
+                    if (file.Size > maxFileSize)
+                    {
+                        _statusMessage += $"File '{file.Name}' is too large (max 15 MB).\n";
+                        continue;
+                    }
 
-        // Save back to a MemoryStream in JPEG format
-        using var outputStream = new MemoryStream();
-        var encoder = new JpegEncoder { Quality = 75 };
-        image.Save(outputStream, encoder);
-        outputStream.Position = 0;
+                    // 1. Read file into memory
+                    using var originalStream = file.OpenReadStream(maxFileSize);
+                    using var inMemoryStream = new MemoryStream();
+                    await originalStream.CopyToAsync(inMemoryStream);
+                    inMemoryStream.Position = 0;
 
-        // Upload to Azure
-        try
-        {
-            // 1. Get SAS token + container URL from your backend
-            SasDto sasDto = await ImageService.GetSasTokenAsync();
+                    // 2. Resize with ImageSharp
+                    using var image = SixLabors.ImageSharp.Image.Load(inMemoryStream);
+                    image.Mutate(ctx =>
+                    {
+                        ctx.Resize(new ResizeOptions
+                            {
+                                Mode = ResizeMode.Max,
+                                Size = new Size(1200, 0)
+                            });
+                    });
 
-            // 2. Create the BlobServiceClient using the SAS
-            var blobServiceClient = new BlobServiceClient(new Uri($"{sasDto.ContainerUrl}?{sasDto.SasToken}"));
-            var containerClient = blobServiceClient.GetBlobContainerClient("");
+                    // 3. Save to MemoryStream (JPEG)
+                    using var outputStream = new MemoryStream();
+                    var encoder = new JpegEncoder { Quality = 75 };
+                    image.Save(outputStream, encoder);
+                    outputStream.Position = 0;
 
-            // 3. Create a unique name for the blob
-            var blobName = $"{Guid.NewGuid()}.jpg";
-            var blobClient = containerClient.GetBlobClient(blobName);
+                    // 4. Get SAS + container URL
+                    var sasDto = await ImageService.GetSasTokenAsync();
 
-            // 4. Upload the processed image
-            await blobClient.UploadAsync(outputStream, overwrite: true);
+                    // 5. Create BlobServiceClient w/ SAS
+                    var blobServiceClient = new BlobServiceClient(
+                        new Uri($"{sasDto.ContainerUrl}?{sasDto.SasToken}"));
 
-            // 5. URL of the uploaded blob
-            var finalUrl = blobClient.Uri.ToString();
+                    var containerClient = blobServiceClient.GetBlobContainerClient("");
 
-            // (Optional) Save the URL to your DB or display it
-            _uploadMessage = $"Uploaded OK! URL: {finalUrl}";
+                    // 6. Unique blob name
+                    var extension = Path.GetExtension(file.Name);
+                    if (string.IsNullOrWhiteSpace(extension)) extension = ".jpg";
+                    var blobName = $"{Guid.NewGuid()}{extension}";
+
+                    // 7. Upload
+                    var blobClient = containerClient.GetBlobClient(blobName);
+                    await blobClient.UploadAsync(outputStream, overwrite: true);
+
+                    // 8. Remove SAS token from final URL
+                    var uriBuilder = new UriBuilder(blobClient.Uri)
+                        {
+                            Query = null
+                        };
+                    var noSasUrl = uriBuilder.Uri.ToString();
+
+                    // Add to product images
+                    _product.Images.Add(noSasUrl);
+
+                    _statusMessage += $"Uploaded '{file.Name}' -> {noSasUrl}\n";
+                }
+                catch (Exception ex)
+                {
+                    _statusMessage += $"Error uploading '{file.Name}': {ex.Message}\n";
+                }
+            }
         }
-        catch (Exception ex)
+
+        // Create the product
+        var response = await ProductService.CreateProductAsync(_product);
+        _statusMessage += $"\nProduct submission complete with result '{response}'\n";
+    }
+
+    // Submitting the new category (without reloading the entire page)
+    private async Task HandleCategorySubmit()
+    {
+        // Clear status each submit
+        _categoryStatusMessage = "";
+
+        // Create the category in your backend
+        var result = await ProductService.CreateProductCategoryAsync(_newCategory);
+
+        if (result.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            _uploadMessage = $"Error uploading: {ex.Message}";
+            // Reload the in-memory category list so the new one appears in the dropdown
+            _categories = await ProductService.GetAllCategories();
+
+            // Reset the form fields
+            _newCategory = new CreateProductCategoryDto();
+
+            _categoryStatusMessage = "Category created successfully!";
+        }
+        else
+        {
+            _categoryStatusMessage = "Failed to create category. Please check logs or try again.";
         }
     }
 }

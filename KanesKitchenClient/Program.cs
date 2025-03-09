@@ -27,6 +27,7 @@ builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserManagmentService, UserManagmentService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddLocalization();
 

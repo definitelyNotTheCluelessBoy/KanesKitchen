@@ -6,7 +6,7 @@
 <PageTitle>Home</PageTitle>
 <AuthorizeView Roles="User, Admin">
     <Authorized>
-        <p>@resource["Name"]: @context.User.Identity.Name </p>
+        <p>@resource["Name"]: @context.User.Claims.First().Value </p>
         <AuthorizeView Roles="User" Context="innerContext">
             <p>@resource["UserMessage"]</p>
         </AuthorizeView>
