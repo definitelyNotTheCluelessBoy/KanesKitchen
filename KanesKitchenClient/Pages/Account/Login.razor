@@ -1,5 +1,7 @@
 ﻿@page "/account/login"
-
+@inject AuthenticationStateProvider AuthicationStateProvider
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
 
 <div class="container">
     <div class="row">
@@ -7,20 +9,20 @@
             <EditForm Model="LoginDto" OnValidSubmit="HandleLogin">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-                
+
                 <div class="card">
                     <div class="card-header">Fill this form to Login</div>
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label class="form-label">User Name</label>
-                            <InputText @bind-Value="LoginDto.UserName" class="form-control"></InputText>
+                            <InputText @bind-Value="LoginDto.UserName" class="form-control" />
                         </div>
                         <div class="form-group mt-3">
                             <label class="form-label">Password</label>
                             <input type="password" @bind="LoginDto.Password" class="form-control" />
                         </div>
                         <div class="form-group mt-3">
-                            <button class="btn btn-outline-primary float-end" type="submit">LoginDto</button>
+                            <button class="btn btn-outline-primary float-end" type="submit">Login</button>
                         </div>
                     </div>
                 </div>
@@ -31,6 +33,7 @@
 
 @code {
     LoginDto LoginDto = new();
+
     async Task HandleLogin()
     {
         var apiCallResult = await UserManagmentService.LoginAsync(LoginDto);
@@ -39,12 +42,16 @@
             var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthicationStateProvider;
             await customAuthenticationStateProvider.UpdateAuthenticationState(
                 new Session
-                {
-                    Token = apiCallResult.Token,
-                    RefreshToken = apiCallResult.RefreshToken
-                });
-            NavManager.NavigateTo("/",forceLoad:true);
+                    {
+                        Token = apiCallResult.Token,
+                        RefreshToken = apiCallResult.RefreshToken
+                    });
+            NavManager.NavigateTo("/", forceLoad: true);
+        }
+        else
+        {
+            // Show a popup message if login fails
+            await JS.InvokeVoidAsync("alert", "Invalid credentials. Please try again.");
         }
     }
-
 }

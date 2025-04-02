@@ -1,0 +1,55 @@
+﻿@page "/products"
+
+@inject NavigationManager NavigationManager
+
+<h3>Available Products</h3>
+
+@if (products == null)
+{
+    <p>Loading products...</p>
+}
+else if (products.Count == 0)
+{
+    <p>No products available.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in products)
+        {
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card h-100" style="cursor: pointer;" @onclick="() => NavigateToProduct(product.Id)">
+                    @if (product.Images != null && product.Images.Any())
+                    {
+                        <img class="card-img-top" src="@product.Images.First()" alt="@product.ProductName" style="height:150px; object-fit: cover;" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text">@product.ProductDescription</p>
+                        <p class="card-text">
+                            <small class="text-muted">@product.ProductCategory</small>
+                        </p>
+                        <p class="card-text">
+                            <strong>@(product.ProductPrice.HasValue ? product.ProductPrice.Value.ToString() + "€" : "N/A")</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<ProductDto>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Adjust the API call to your actual product service method
+        products = await ProductService.GetAllProductsAsync();
+    }
+
+    private void NavigateToProduct(int id)
+    {
+        NavigationManager.NavigateTo($"product/{id}");
+    }
+}

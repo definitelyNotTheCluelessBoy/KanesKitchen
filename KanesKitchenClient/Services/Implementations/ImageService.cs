@@ -1,7 +1,6 @@
 ﻿using KanesKitchenClient.Services.Interfaces;
 using SharedLibrary.DTOs.EShop;
 using System.Net.Http.Json;
-using static System.Net.WebRequestMethods;
 
 namespace KanesKitchenClient.Services.Implementations
 {

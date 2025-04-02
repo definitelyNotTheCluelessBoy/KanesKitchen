@@ -1,37 +1,131 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JS
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<style>
+    /* Slightly dark purple bar */
+    .bg-purple {
+        background-color: #6f42c1 !important; /* Adjust as needed */
+        color: #fff !important;
+    }
+
+    /* Lightly blue top bar */
+    .bg-lightblue {
+        background-color: #cce5ff !important; /* Adjust as needed */
+        color: #000 !important;
+    }
+
+    /* Darker blue for buttons and dropdowns */
+    .btn-darkblue, .select-darkblue {
+        background-color: #004085 !important; /* Adjust as needed */
+        border-color: #004085 !important;
+        color: #fff !important;
+    }
+</style>
+
+<div class="container-fluid vh-100 d-flex flex-row p-0">
+    <!-- Sidebar -->
+    <div class="d-flex flex-column p-0" style="width: 250px;">
+        <!-- Purple header bar for brand/title -->
+        <div class="bg-purple p-3">
+            <h4 class="m-0">Kanes Kithen</h4>
+        </div>
+        <!-- Remainder of the sidebar -->
+        <div class="flex-fill bg-light border-end">
+            <NavMenu />
+        </div>
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized> 
-                    <a class="btn btn-none" @onclick="LogoutClicked">Log out</a>
-                </Authorized>
-                <NotAuthorized>
-                    <a class="btn btn-none" href="account/login">Log in</a>
-                    <a class="btn btn-none" href="account/register">Register</a>
-                </NotAuthorized>
-            </AuthorizeView>
-            <CultureSelector />
+    <!-- Main Content Area -->
+    <div class="flex-fill d-flex flex-column">
+        <!-- Top bar (lightly blue) -->
+        <div class="bg-lightblue d-flex justify-content-between align-items-center px-3 py-2">
+            <div>
+                <AuthorizeView>
+                    <Authorized>
+                        <button class="btn btn-darkblue" @onclick="LogoutClicked">Log out</button>
+                        <button class="btn btn-darkblue ms-2" @onclick="GoToBasket">Basket</button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a class="btn btn-darkblue me-2" href="account/login">Log in</a>
+                        <a class="btn btn-darkblue" href="account/register">Register</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+            <div>
+                <label class="me-2">Select your locale:</label>
+                <select class="form-select form-select-sm d-inline-block w-auto select-darkblue"
+                        @bind="selectedCulture"
+                        @bind:after="ApplySelectedCultureAsync">
+                    @foreach (var culture in supportedCultures)
+                    {
+                        <option value="@culture">@GetCultureDisplayName(culture)</option>
+                    }
+                </select>
+            </div>
         </div>
 
-        <article class="content px-4">
+        <!-- Main body content -->
+        <div class="flex-fill overflow-auto p-3">
             @Body
-        </article>
-    </main>
+        </div>
+    </div>
 </div>
 
 @code {
-    async Task LogoutClicked()
+    private CultureInfo[] supportedCultures = new[]
     {
-        var session = new Session();
-        var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthicationStateProvider;
-        await customAuthenticationStateProvider.UpdateAuthenticationState(session);
-        NavManager.NavigateTo("/", forceLoad:true);
+        new CultureInfo("en-UK"),
+        new CultureInfo("sk-SK"),
+    };
+
+    private CultureInfo? selectedCulture;
+    private int? userId;
+
+    protected override async void OnInitialized()
+    {
+        selectedCulture = CultureInfo.CurrentCulture;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            userId = int.Parse(user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+        }
+        else
+        {
+            userId = null;
+        }
     }
 
+    private async Task ApplySelectedCultureAsync()
+    {
+        if (CultureInfo.CurrentCulture != selectedCulture)
+        {
+            await JS.InvokeVoidAsync("blazorCulture.set", selectedCulture!.Name);
+            Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        }
+    }
+
+    private string GetCultureDisplayName(CultureInfo culture)
+        => culture.Name switch
+        {
+            "en-UK" => "English",
+            "sk-SK" => "Slovak",
+            _ => culture.DisplayName
+        };
+
+    private async Task LogoutClicked()
+    {
+        var session = new Session();
+        var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+        await customAuthenticationStateProvider.UpdateAuthenticationState(session);
+        Navigation.NavigateTo("/", forceLoad: true);
+    }
+
+    private void GoToBasket()
+    {
+        Navigation.NavigateTo($"/basket/{userId}", forceLoad: true);
+    }
 }

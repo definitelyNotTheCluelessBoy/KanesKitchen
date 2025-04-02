@@ -1,4 +1,7 @@
 ﻿@page "/account/register"
+@inject AuthenticationStateProvider AuthicationStateProvider
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
 
 <div class="container">
     <div class="row">
@@ -12,12 +15,12 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label class="form-label">User name</label>
-                            <InputText @bind-Value="RegisterDto.UserName" class="form-control"></InputText>
+                            <InputText @bind-Value="RegisterDto.UserName" class="form-control" />
                         </div>
 
                         <div class="form-group mt-3">
                             <label class="form-label">Email</label>
-                            <InputText @bind-Value="RegisterDto.Email" class="form-control"></InputText>
+                            <InputText @bind-Value="RegisterDto.Email" class="form-control" />
                         </div>
 
                         <div class="form-group mt-3">
@@ -42,26 +45,29 @@
 
 @code {
     RegisterDto RegisterDto = new();
+
     async Task HandleRegistration()
     {
         var apiRegisterResponse = await UserManagmentService.RegisterAsync(RegisterDto);
         if (apiRegisterResponse.Success)
         {
             var apiLoginResponse = await UserManagmentService.LoginAsync(new LoginDto
-            {
-                UserName = RegisterDto.UserName,
-                Password = RegisterDto.Password
-            });
+                {
+                    UserName = RegisterDto.UserName,
+                    Password = RegisterDto.Password
+                });
             var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthicationStateProvider;
-            await customAuthenticationStateProvider.UpdateAuthenticationState(
-                new Session
-                    {
-                        Token = apiLoginResponse.Token,
-                        RefreshToken = apiLoginResponse.RefreshToken
-                    });
+            await customAuthenticationStateProvider.UpdateAuthenticationState(new Session
+                {
+                    Token = apiLoginResponse.Token,
+                    RefreshToken = apiLoginResponse.RefreshToken
+                });
             NavManager.NavigateTo("/", forceLoad: true);
+        }
+        else
+        {
+            // Display the error message from the API response
+            await JS.InvokeVoidAsync("alert", apiRegisterResponse.Message);
         }
     }
 }
-
-

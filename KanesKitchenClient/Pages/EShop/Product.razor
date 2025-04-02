@@ -1,0 +1,137 @@
+﻿@page "/product/{id:int}"
+
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<div class="container d-flex justify-content-center my-4">
+    <div class="row w-75">
+        <!-- Left side: Image carousel/slider -->
+        <div class="col-md-5 d-flex justify-content-center mb-3">
+            @if (product?.Images != null && product.Images.Any())
+            {
+                <div class="position-relative">
+                    <img src="@product.Images[currentImageIndex]"
+                         alt="@product.ProductName"
+                         style="max-width: 100%; height: auto;" />
+
+                    <!-- Left arrow -->
+                    <button class="btn btn-secondary position-absolute top-50 start-0 translate-middle-y"
+                            style="transform: translateY(-50%);"
+                            @onclick="PreviousImage"
+                            disabled="@((currentImageIndex == 0) || (product.Images == null))">
+                        ←
+                    </button>
+
+                    <!-- Right arrow -->
+                    <button class="btn btn-secondary position-absolute top-50 end-0 translate-middle-y"
+                            style="transform: translateY(-50%);"
+                            @onclick="NextImage"
+                            disabled="@((product.Images == null) || (currentImageIndex >= product.Images.Count - 1))">
+                        →
+                    </button>
+                </div>
+            }
+            else
+            {
+                <p>No images available.</p>
+            }
+        </div>
+        
+        <!-- Right side: Product details -->
+        <div class="col-md-7">
+            <h2>@product?.ProductName</h2>
+            <p><strong>Category:</strong> @product?.ProductCategory</p>
+            <p><strong>Description:</strong> @product?.ProductDescription</p>
+            <p>
+                <strong>Price:</strong>
+                @(product?.ProductPrice.HasValue == true
+                    ? $"{product.ProductPrice.Value:0.00}€" 
+                    : "N/A")
+            </p>
+            <button class="btn btn-primary" @onclick="AddToBasket">Add to Basket</button>
+            
+            @if (userRole == "Admin")
+            {
+                <button class="btn btn-primary" @onclick="ModifyProduct">Modify product</button>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    private ProductDto? product;
+    private int currentImageIndex = 0;
+
+    private string? userRole;
+    private int? userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch the product details by ID
+        product = await ProductService.GetProductByIdAsync(id);
+        // Retrieve user claims from AuthenticationStateProvider
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            userRole = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            userId = int.Parse(user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+        } else {
+            userRole = "Guest";
+            userId = null;
+        }
+    }
+
+    private void PreviousImage()
+    {
+        if (product?.Images is null) return;
+
+        if (currentImageIndex > 0)
+        {
+            currentImageIndex--;
+        }
+    }
+
+    private void NextImage()
+    {
+        if (product?.Images is null) return;
+
+        if (currentImageIndex < product.Images.Count - 1)
+        {
+            currentImageIndex++;
+        }
+    }
+
+    private async Task AddToBasket()
+    {
+        if (userRole == "Guest")
+        {
+            // Show a popup informing the guest to log in before proceeding
+            await JS.InvokeVoidAsync("alert", "You need to log in before adding a product to your basket.");
+            return;
+        }
+        else
+        {
+            var basketEntry = new AddProductToBasketDto
+                {
+                    ProductId = product.Id,
+                    Amount = 1,
+                    UserId = userId ?? 0,
+                };
+            var response = await BasketService.AddProductToBasketAsync(basketEntry);
+            // Notify the user that the product has been added to the basket
+            await JS.InvokeVoidAsync("alert", response.Message);
+        }
+    }
+
+    private void ModifyProduct()
+    {
+        NavigationManager.NavigateTo($"modify-product/{id}");
+    }
+}

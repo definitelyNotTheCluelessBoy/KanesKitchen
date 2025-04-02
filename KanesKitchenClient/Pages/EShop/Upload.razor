@@ -1,11 +1,5 @@
 ﻿@page "/create-product"
 
-@using Microsoft.AspNetCore.Components.Forms
-@using Azure.Storage.Blobs
-@using SixLabors.ImageSharp
-@using SixLabors.ImageSharp.Processing
-@using SixLabors.ImageSharp.Formats.Jpeg
-
 @inject NavigationManager NavigationManager
 
 <h3 class="mb-4">Create New Product</h3>
@@ -148,7 +142,7 @@
     protected override async Task OnInitializedAsync()
     {
         // Fetch existing categories for the product form
-        _categories = await ProductService.GetAllCategories();
+        _categories = await ProductService.GetAllCategoriesAsync();
     }
 
     // Handling file selection for the product
@@ -259,7 +253,7 @@
         if (result.StatusCode == System.Net.HttpStatusCode.OK)
         {
             // Reload the in-memory category list so the new one appears in the dropdown
-            _categories = await ProductService.GetAllCategories();
+            _categories = await ProductService.GetAllCategoriesAsync();
 
             // Reset the form fields
             _newCategory = new CreateProductCategoryDto();

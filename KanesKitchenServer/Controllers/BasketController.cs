@@ -1,5 +1,5 @@
 ﻿using KanesKitchenServer.Interfaces;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.DTOs.EShop;
 
@@ -28,15 +28,16 @@ namespace KanesKitchenServer.Controllers
             var response = await _basketRepository.AddProductToBasketAsync(addProductToBasketDto.UserId, addProductToBasketDto.ProductId, addProductToBasketDto.Amount);
             if (!response.Success)
             {
-                return BadRequest(response.Message);
+                return BadRequest(response);
             }
-            return Ok(response.Message);
+            return Ok(response);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteProductFromBasket([FromBody] DeleteProductFromBasketDto deleteProductFromBasketDto)
+        [Route("{userId}/{productId}")]
+        public async Task<IActionResult> DeleteProductFromBasket([FromRoute] int userId, [FromRoute] int productId)
         {
-            var response = await _basketRepository.DeleteProductFromBasketAsync(deleteProductFromBasketDto.UserId, deleteProductFromBasketDto.ProductId);
+            var response = await _basketRepository.DeleteProductFromBasketAsync(userId, productId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);

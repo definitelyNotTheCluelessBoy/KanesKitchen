@@ -22,17 +22,21 @@ namespace KanesKitchenServer.Repositories
             if (product == null) { return new GeneralResponse(false, "Product not found."); }
             
             var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserId == userId && b.ProductId == productId);
-            
+
+            if (amount > product.ProductStock) { return new GeneralResponse(false, "Not enough stock."); }
+
             if (basket == null)
             {
                 basket = new Basket { UserId = userId, ProductId = productId, Number = amount };
                 await _context.Baskets.AddAsync(basket);
+                product.ProductStock -= amount;
                 _context.SaveChanges();
                 return new GeneralResponse(true, "Product added to basket.");
             }
             else
             {
                 basket.Number += amount;
+                product.ProductStock -= amount;
                 _context.SaveChanges();
                 return new GeneralResponse(true, "Product amount updated.");
             }
@@ -59,8 +63,10 @@ namespace KanesKitchenServer.Repositories
 
         public Task<List<Basket>> GetBasketAsync(int userId)
         {
-            var basket = _context.Baskets.Where(b => b.UserId == userId).ToListAsync();
+            var basket = _context.Baskets.Where(b => b.UserId == userId).Include(b => b.Product).ToListAsync();
             return basket;
         }
+
+      
     }
 }

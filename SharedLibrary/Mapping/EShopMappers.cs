@@ -52,6 +52,20 @@ namespace SharedLibrary.Mapping
             };
         }
 
+        public static UpdateProductDto ProductToUpdateDto(this Product product)
+        {
+            return new UpdateProductDto
+            {
+                ProductName = product.ProductName,
+                ProductNameSvk = product.ProductNameSvk,
+                ProductDescriptionSvk = product.ProductDescriptionSvk,
+                ProductDescription = product.ProductDescription,
+                ProductCategoryId = product.ProductCategoryId,
+                ProductPrice = product.ProductPrice,
+                ProductStock = product.ProductStock
+            };
+        }
+
         public static ProductCategory CreateCategoryDTOtoCategory(this CreateProductCategoryDto updateDto)
         {
             return new ProductCategory

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.DTOs.EShop
 {
-    public class DeleteImageDto
+    public class AddImageDto
     {
         public int productId { get; set; }
 

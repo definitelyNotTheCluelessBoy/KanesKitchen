@@ -1,12 +1,14 @@
 ﻿@page "/"
 @using KanesKitchenClient.Localization
 @using Microsoft.Extensions.Localization
+@using System.Globalization
+@using System.Security.Claims
 @inject IStringLocalizer<HomeResource> resource
 
 <PageTitle>Home</PageTitle>
 <AuthorizeView Roles="User, Admin">
     <Authorized>
-        <p>@resource["Name"]: @context.User.Claims.First().Value </p>
+        <p>Role: @(context.User.FindFirst(ClaimTypes.Role)?.Value ?? "No Role Found")</p>
         <AuthorizeView Roles="User" Context="innerContext">
             <p>@resource["UserMessage"]</p>
         </AuthorizeView>
@@ -18,4 +20,6 @@
         <p>@resource["UnauthorizedMessage"]</p>
     </NotAuthorized>
 </AuthorizeView>
+<p>Current Culture: @CultureInfo.CurrentCulture.Name</p>
+<p>Current UI Culture: @CultureInfo.CurrentUICulture.Name</p>
 

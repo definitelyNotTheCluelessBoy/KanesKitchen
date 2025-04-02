@@ -20,10 +20,7 @@ namespace KanesKitchenClient.Services.Implementations
         {
             var httpClient = _httpClient.GetPublicHttpClient().Result;
             var response = await httpClient.PostAsJsonAsync($"{UserManagmentServiceRoute}/login", loginRequest);
-            if (!response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<LoginResponse>();
-            };
+           
             return await response.Content.ReadFromJsonAsync<LoginResponse>();
         }
 

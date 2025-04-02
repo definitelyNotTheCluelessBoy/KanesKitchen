@@ -37,6 +37,17 @@ namespace KanesKitchenServer.Controllers
             return Ok(product.ProductToDto(language));
         }
 
+        [HttpGet("update/{id}")]
+        public async Task<IActionResult> GetByIdForUpdate([FromRoute] int id)
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product.ProductToUpdateDto());
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductDto createDto)
         {

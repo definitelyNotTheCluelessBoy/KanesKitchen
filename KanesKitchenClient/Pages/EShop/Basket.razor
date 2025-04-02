@@ -1,0 +1,137 @@
+﻿@page "/basket/{UserId:int}"
+@using SharedLibrary.Models.Eshop;
+@inject IBasketService BasketService
+@inject NavigationManager NavigationManager
+
+<h3>Your Basket</h3>
+
+@if (basketItems == null)
+{
+    <p>Loading basket items...</p>
+}
+else if (!basketItems.Any())
+{
+    <p>Your basket is empty.</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Amount</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in basketItems)
+            {
+                <tr>
+                    <!-- Clicking on product name navigates to product page -->
+                    <td style="cursor:pointer" @onclick="@(() => GoToProduct(item.ProductId))">
+                        @GetProductName(item.Product)
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm me-1" @onclick="@(() => DecreaseQuantity(item))">–</button>
+                        <span>@item.Number</span>
+                        <button class="btn btn-success btn-sm ms-1" @onclick="@(() => IncreaseQuantity(item))">+</button>
+                    </td>
+                    <td>
+                        @if (item.Product != null && item.Number.HasValue)
+                        {
+                            @((item.Number.Value * item.Product.ProductPrice).ToString("C"))
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteBasketItem(item))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public int UserId { get; set; }
+
+    private List<SharedLibrary.Models.Eshop.Basket> basketItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch the basket items for the given user.
+        basketItems = await BasketService.GetBasketAsync(UserId);
+    }
+
+    private void GoToProduct(int? productId)
+    {
+        if (productId.HasValue)
+        {
+            // Navigate to the product details page.
+            NavigationManager.NavigateTo($"/product/{productId.Value}");
+        }
+    }
+
+    private string GetProductName(SharedLibrary.Models.Eshop.Product product)
+    {
+        // Returns the product name based on the current culture.
+        return CultureInfo.CurrentCulture.Name == "sk-SK" ? product.ProductNameSvk : product.ProductName;
+    }
+
+    private async Task DeleteBasketItem(SharedLibrary.Models.Eshop.Basket item)
+    {
+        // Call the deletion method from the BasketService.
+        var result = await BasketService.DeleteProductFromBasketAsync(item.UserId, item.ProductId);
+        if (result.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            basketItems.Remove(item);
+            StateHasChanged();
+        }
+        else
+        {
+            // Optionally, display an error message.
+        }
+    }
+
+    private async Task IncreaseQuantity(SharedLibrary.Models.Eshop.Basket item)
+    {
+        // Increment the quantity.
+        // Update the basket item on the backend.
+        var updateResult = await BasketService.AddProductToBasketAsync(new AddProductToBasketDto {UserId = item.UserId, ProductId = item.ProductId, Amount = 1});
+        if (updateResult.Success == true)
+        {
+            item.Number = (item.Number ?? 0) + 1;
+            StateHasChanged();
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("alert", updateResult.Message);
+        }
+    }
+
+    private async Task DecreaseQuantity(SharedLibrary.Models.Eshop.Basket item)
+    {
+        // Only decrease if the number is greater than 1.
+        if (item.Number > 1)
+        {
+            var updateResult = await BasketService.AddProductToBasketAsync(new AddProductToBasketDto { UserId = item.UserId, ProductId = item.ProductId, Amount = -1});
+            if (updateResult.Success == true)
+            {
+                item.Number--;
+                StateHasChanged();
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", updateResult.Message);
+            }
+        } else
+        {
+            await JS.InvokeVoidAsync("alert", "To remove item use Remove button!");
+        }
+    }
+}

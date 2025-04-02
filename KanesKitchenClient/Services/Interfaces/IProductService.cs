@@ -7,6 +7,11 @@ namespace KanesKitchenClient.Services.Interfaces
     {
         Task<HttpResponseMessage> CreateProductAsync(CreateProductDto createProductDto);
         Task<HttpResponseMessage> CreateProductCategoryAsync(CreateProductCategoryDto createProductCategoryDto);
-        Task<List<ProductCategory>> GetAllCategories();
+        Task<List<ProductCategory>> GetAllCategoriesAsync();
+        Task<List<ProductDto>> GetAllProductsAsync();
+        Task<ProductDto> GetProductByIdAsync(int id);
+        Task<UpdateProductDto> GetProductByIdForUpdateAsync(int id);
+        Task<HttpResponseMessage> UpdateProductAsync(int id, UpdateProductDto updateProductDto);
+        Task<HttpResponseMessage> DeleteProductByIdAsync(int id);
     }
 }

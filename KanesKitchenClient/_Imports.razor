@@ -18,9 +18,14 @@
 @using SixLabors.ImageSharp.Processing
 @using SixLabors.ImageSharp.Formats.Jpeg
 @using SharedLibrary.Models.Eshop
+@using KanesKitchenClient.Localization
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using System.Security.Claims
 
-@inject AuthenticationStateProvider AuthicationStateProvider
+@inject IJSRuntime JS
+@inject IProductService ProductService
 @inject IUserManagmentService UserManagmentService
 @inject IImageService ImageService
 @inject IProductService ProductService
-@inject NavigationManager NavManager
+@inject IBasketService BasketService
