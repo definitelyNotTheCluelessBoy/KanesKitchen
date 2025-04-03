@@ -5,8 +5,8 @@ namespace KanesKitchenServer.Interfaces
 {
     public interface IComentRepository
     {
-        Task<List<Comment>> GetComments(int postId);
-        Task<GeneralResponse> AddComment(int postId, string content, int userId);
+        Task<Comment> GetComment(int commentId);
+        Task<GeneralResponse> AddComment(Comment newComment);
         Task<GeneralResponse> DeleteComment(int commentId);
         Task<GeneralResponse> UpdateComment(int commentId, string content);
     }

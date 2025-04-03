@@ -29,6 +29,8 @@ builder.Services.AddScoped<IUserManagmentService, UserManagmentService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddLocalization();
 
 var host = builder.Build();
