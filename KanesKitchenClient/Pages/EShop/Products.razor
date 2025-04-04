@@ -1,8 +1,17 @@
 ﻿@page "/products"
 
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStringLocalizer<ProductResource> resource
 
-<h3>Available Products</h3>
+<div class="d-flex justify-content-between align-items-center">
+    <h3>@resource["ProductsHeader"]</h3>
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <button class="btn btn-primary" @onclick="NavigateToCreateProduct">@resource["CreateProductButton"]</button>
+        </Authorized>
+    </AuthorizeView>
+</div>
 
 @if (products == null)
 {
@@ -44,12 +53,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Adjust the API call to your actual product service method
         products = await ProductService.GetAllProductsAsync();
     }
 
     private void NavigateToProduct(int id)
     {
         NavigationManager.NavigateTo($"product/{id}");
+    }
+
+    private void NavigateToCreateProduct()
+    {
+        NavigationManager.NavigateTo("/create-product");
     }
 }

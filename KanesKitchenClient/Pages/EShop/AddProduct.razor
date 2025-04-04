@@ -128,24 +128,19 @@
 </div>
 
 @code {
-    // (1) PRODUCT-FORM FIELDS
     private CreateProductDto _product = new CreateProductDto();
     private List<IBrowserFile> _selectedFiles = new();
     private string _statusMessage;
     private List<ProductCategory> _categories = new();
 
-    // (2) CATEGORY-FORM FIELDS
     private CreateProductCategoryDto _newCategory = new CreateProductCategoryDto();
     private string _categoryStatusMessage;
 
-    // Called once when the component is initialized
     protected override async Task OnInitializedAsync()
     {
-        // Fetch existing categories for the product form
         _categories = await ProductService.GetAllCategoriesAsync();
     }
 
-    // Handling file selection for the product
     private void HandleFilesSelected(InputFileChangeEventArgs e)
     {
         _selectedFiles = e.GetMultipleFiles().ToList();
@@ -236,26 +231,20 @@
             }
         }
 
-        // Create the product
         var response = await ProductService.CreateProductAsync(_product);
         _statusMessage += $"\nProduct submission complete with result '{response}'\n";
     }
 
-    // Submitting the new category (without reloading the entire page)
     private async Task HandleCategorySubmit()
     {
-        // Clear status each submit
         _categoryStatusMessage = "";
 
-        // Create the category in your backend
         var result = await ProductService.CreateProductCategoryAsync(_newCategory);
 
         if (result.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            // Reload the in-memory category list so the new one appears in the dropdown
             _categories = await ProductService.GetAllCategoriesAsync();
 
-            // Reset the form fields
             _newCategory = new CreateProductCategoryDto();
 
             _categoryStatusMessage = "Category created successfully!";

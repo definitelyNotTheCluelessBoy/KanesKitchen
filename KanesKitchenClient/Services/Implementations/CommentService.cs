@@ -17,25 +17,25 @@ namespace KanesKitchenClient.Services.Implementations
             _httpClient = httpClient;
         }
 
-        public async Task<HttpResponseMessage> DeleteComment(int id)
+        public async Task<HttpResponseMessage> DeleteCommentAsync(int id)
         {
             var httpClient = await _httpClient.GetPrivateHttpClient();
             return await httpClient.DeleteAsync($"{commentServiceRoute}/{id}");
         }
 
-        public async Task<GetCommentDto> GetComment(int id)
+        public async Task<GetCommentDto> GetCommentAsync(int id)
         {
             var httpClient = await _httpClient.GetPrivateHttpClient();
             return await httpClient.GetFromJsonAsync<GetCommentDto>($"{commentServiceRoute}");
         }
 
-        public async Task<HttpResponseMessage> UpdateComment(int id, string content)
+        public async Task<HttpResponseMessage> UpdateCommentAsync(int id, string content)
         {
             var httpClient = await _httpClient.GetPrivateHttpClient();
             return await httpClient.PutAsJsonAsync($"{commentServiceRoute}/{id}", content);
         }
 
-        public async Task<HttpResponseMessage> CreateComment(NewCommentDto newComment)
+        public async Task<HttpResponseMessage> CreateCommentAsync(NewCommentDto newComment)
         {
             var httpClient = await _httpClient.GetPrivateHttpClient();
             return await httpClient.PostAsJsonAsync($"{commentServiceRoute}", newComment);

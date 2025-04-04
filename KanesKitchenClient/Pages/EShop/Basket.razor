@@ -64,7 +64,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetch the basket items for the given user.
         basketItems = await BasketService.GetBasketAsync(UserId);
     }
 
@@ -72,36 +71,27 @@ else
     {
         if (productId.HasValue)
         {
-            // Navigate to the product details page.
             NavigationManager.NavigateTo($"/product/{productId.Value}");
         }
     }
 
     private string GetProductName(SharedLibrary.Models.Eshop.Product product)
     {
-        // Returns the product name based on the current culture.
         return CultureInfo.CurrentCulture.Name == "sk-SK" ? product.ProductNameSvk : product.ProductName;
     }
 
     private async Task DeleteBasketItem(SharedLibrary.Models.Eshop.Basket item)
     {
-        // Call the deletion method from the BasketService.
         var result = await BasketService.DeleteProductFromBasketAsync(item.UserId, item.ProductId);
         if (result.StatusCode == System.Net.HttpStatusCode.OK)
         {
             basketItems.Remove(item);
             StateHasChanged();
         }
-        else
-        {
-            // Optionally, display an error message.
-        }
     }
 
     private async Task IncreaseQuantity(SharedLibrary.Models.Eshop.Basket item)
     {
-        // Increment the quantity.
-        // Update the basket item on the backend.
         var updateResult = await BasketService.AddProductToBasketAsync(new AddProductToBasketDto {UserId = item.UserId, ProductId = item.ProductId, Amount = 1});
         if (updateResult.Success == true)
         {
@@ -116,7 +106,6 @@ else
 
     private async Task DecreaseQuantity(SharedLibrary.Models.Eshop.Basket item)
     {
-        // Only decrease if the number is greater than 1.
         if (item.Number > 1)
         {
             var updateResult = await BasketService.AddProductToBasketAsync(new AddProductToBasketDto { UserId = item.UserId, ProductId = item.ProductId, Amount = -1});

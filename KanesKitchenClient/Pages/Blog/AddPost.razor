@@ -1,0 +1,76 @@
+﻿@page "/create-post"
+@using SharedLibrary.DTOs.Blog
+@inject NavigationManager NavigationManager
+@inject IPostService PostService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStringLocalizer<PostResource> resource
+
+
+<h3 class="mb-4">@resource["CreateHeader"]</h3>
+
+<!-- Create Post Card -->
+<div class="card shadow-sm mb-4" style="max-width: 700px;">
+    <div class="card-body">
+        <EditForm Model="_newPost" OnValidSubmit="HandleValidSubmit" class="row g-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+
+            <!-- Post Title -->
+            <div class="col-12">
+                <label class="form-label fw-bold">@resource["Title"]</label>
+                <InputText @bind-Value="_newPost.Title" class="form-control" />
+            </div>
+
+            <!-- Post Content -->
+            <div class="col-12">
+                <label class="form-label fw-bold">@resource["Content"]</label>
+                <InputTextArea @bind-Value="_newPost.Content" class="form-control" rows="5" />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary">@resource["SubmitButton"]</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_statusMessage))
+{
+    <div class="alert alert-info">
+        <pre class="m-0">@_statusMessage</pre>
+    </div>
+}
+
+@code {
+    private NewPostDto _newPost = new NewPostDto();
+    private string _statusMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            _newPost.UserId = int.Parse(user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/forum");
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var result = await PostService.CreatePostAsync(_newPost);
+            _statusMessage = "Post created successfully!";
+            NavigationManager.NavigateTo("/forum");
+        }
+        catch (Exception ex)
+        {
+            _statusMessage = $"Error creating post: {ex.Message}";
+        }
+    }
+}

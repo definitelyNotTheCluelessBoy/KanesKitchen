@@ -2,6 +2,7 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JS
+@inject IStringLocalizer<MainLayoutResource> resource
 
 <style>
     /* Slightly dark purple bar */
@@ -29,7 +30,7 @@
     <div class="d-flex flex-column p-0" style="width: 250px;">
         <!-- Purple header bar for brand/title -->
         <div class="bg-purple p-3">
-            <h4 class="m-0">Kanes Kithen</h4>
+            <h4 class="m-0">Kanes Kitchen</h4>
         </div>
         <!-- Remainder of the sidebar -->
         <div class="flex-fill bg-light border-end">
@@ -44,17 +45,17 @@
             <div>
                 <AuthorizeView>
                     <Authorized>
-                        <button class="btn btn-darkblue" @onclick="LogoutClicked">Log out</button>
-                        <button class="btn btn-darkblue ms-2" @onclick="GoToBasket">Basket</button>
+                        <button class="btn btn-darkblue" @onclick="LogoutClicked">@resource["LogOut"]</button>
+                        <button class="btn btn-darkblue ms-2" @onclick="GoToBasket">@resource["Basket"]</button>
                     </Authorized>
                     <NotAuthorized>
-                        <a class="btn btn-darkblue me-2" href="account/login">Log in</a>
-                        <a class="btn btn-darkblue" href="account/register">Register</a>
+                        <a class="btn btn-darkblue me-2" href="account/login">@resource["LogIn"]</a>
+                        <a class="btn btn-darkblue" href="account/register">@resource["Register"]</a>
                     </NotAuthorized>
                 </AuthorizeView>
             </div>
             <div>
-                <label class="me-2">Select your locale:</label>
+                <label class="me-2">@resource["Localization"]</label>
                 <select class="form-select form-select-sm d-inline-block w-auto select-darkblue"
                         @bind="selectedCulture"
                         @bind:after="ApplySelectedCultureAsync">
@@ -111,8 +112,8 @@
     private string GetCultureDisplayName(CultureInfo culture)
         => culture.Name switch
         {
-            "en-UK" => "English",
-            "sk-SK" => "Slovak",
+            "en-UK" => resource["English"],
+            "sk-SK" => resource["Slovak"],
             _ => culture.DisplayName
         };
 

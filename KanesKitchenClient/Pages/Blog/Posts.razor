@@ -1,0 +1,61 @@
+﻿@page "/forum"
+@using SharedLibrary.DTOs.Blog
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<PostResource> resource
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>@resource["Header"]</h3>
+    <AuthorizeView>
+        <Authorized>
+            <button class="btn btn-primary" @onclick="NavigateToCreatePost">@resource["AddPostButton"]</button>
+        </Authorized>
+    </AuthorizeView>
+</div>
+
+@if (posts == null)
+{
+    <p>Loading posts...</p>
+}
+else if (posts.Count == 0)
+{
+    <p>No posts available.</p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var post in posts)
+        {
+            <a class="list-group-item list-group-item-action" style="cursor:pointer;" @onclick="() => NavigateToPost(post.Id)">
+                <div>
+                    <small class="text-muted">@post.UserName</small>
+                </div>
+                <div class="mt-1">
+                    <h5 class="mb-1">@post.Title</h5>
+                </div>
+                <div>
+                    <p class="mb-1">@post.Content</p>
+                </div>
+            </a>
+        }
+    </div>
+}
+
+@code {
+    private List<GetPostDto>? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await PostService.GetPostsAsync();
+        await Task.CompletedTask;
+    }
+
+    private void NavigateToPost(int id)
+    {
+        NavigationManager.NavigateTo($"/post/{id}");
+    }
+
+    private void NavigateToCreatePost()
+    {
+        NavigationManager.NavigateTo("/create-post");
+    }
+}

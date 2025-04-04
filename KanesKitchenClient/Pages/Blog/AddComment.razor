@@ -1,0 +1,73 @@
+﻿@page "/create-comment/{postId:int}"
+@using System.Security.Claims
+@using SharedLibrary.DTOs.Blog
+@inject NavigationManager NavigationManager
+@inject ICommentService CommentService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStringLocalizer<PostResource> postResource
+@inject IStringLocalizer<CommentResource> commentResource
+
+<h3 class="mb-4">@commentResource["CreateHeader"]</h3>
+
+<div class="card shadow-sm mb-4" style="max-width: 700px;">
+    <div class="card-body">
+        <EditForm Model="_newComment" OnValidSubmit="HandleValidSubmit" class="row g-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+
+            <!-- Comment Content -->
+            <div class="col-12">
+                <label class="form-label fw-bold">@postResource["Content"]</label>
+                <InputTextArea @bind-Value="_newComment.Content" class="form-control" rows="5" />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary">@postResource["SubmitButton"]</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_statusMessage))
+{
+    <div class="alert alert-info">
+        <pre class="m-0">@_statusMessage</pre>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int postId { get; set; }
+
+    private NewCommentDto _newComment = new NewCommentDto();
+    private string _statusMessage = string.Empty;
+    private int currentUserId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _newComment.PostId = postId;
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            currentUserId = int.Parse(user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            _newComment.UserId = currentUserId;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var result = await CommentService.CreateCommentAsync(_newComment);
+            _statusMessage = "Comment created successfully!";
+            NavigationManager.NavigateTo($"/post/{postId}");
+        }
+        catch (Exception ex)
+        {
+            _statusMessage = $"Error creating comment: {ex.Message}";
+        }
+    }
+}

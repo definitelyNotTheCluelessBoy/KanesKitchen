@@ -1,16 +1,51 @@
-﻿<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+﻿@inject IStringLocalizer<NavMenuResource> resource
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            <NavLink class="nav-link purple-btn" href="/" Match="NavLinkMatch.All">
+                @resource["Home"]
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link purple-btn" href="/forum">
+                @resource["Forum"]
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link purple-btn" href="/products">
+                @resource["Eshop"]
             </NavLink>
         </div>
     </nav>
 </div>
 
+<style>
+    /* Basic purple button with white text */
+    .purple-btn {
+        background-color: #8A2BE2 !important; /* Purple background */
+        color: #ffffff !important; /* White text */
+        border: none;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+        /* Force the same style for hover, focus, active, and visited states */
+        .purple-btn:hover,
+        .purple-btn:focus,
+        .purple-btn:active,
+        .purple-btn.active,
+        .purple-btn:visited {
+            background-color: #8A2BE2 !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+</style>
+
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
