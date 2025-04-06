@@ -1,5 +1,6 @@
 ﻿@page "/modify-product/{ProductId:int}"
 
+@inject IStringLocalizer<ProductResource> resource
 @inject NavigationManager NavigationManager
 
 <h3 class="mb-4">Modify Product</h3>
@@ -12,29 +13,29 @@
 
             <!-- Product Name -->
             <div class="col-md-6">
-                <label class="form-label fw-bold">Product Name</label>
+                <label class="form-label fw-bold">@resource["ProductName"]</label>
                 <InputText @bind-Value="_product.ProductName" class="form-control" />
             </div>
 
             <div class="col-md-6">
-                <label class="form-label fw-bold">Product Name (SVK)</label>
+                <label class="form-label fw-bold">@resource["ProductNameSVK"]</label>
                 <InputText @bind-Value="_product.ProductNameSvk" class="form-control" />
             </div>
 
             <!-- Descriptions -->
             <div class="col-md-6">
-                <label class="form-label fw-bold">Description</label>
+                <label class="form-label fw-bold">@resource["CreateDescription"]</label>
                 <InputTextArea @bind-Value="_product.ProductDescription" class="form-control" rows="3" />
             </div>
 
             <div class="col-md-6">
-                <label class="form-label fw-bold">Description (SVK)</label>
+                <label class="form-label fw-bold">@resource["CreateDescriptionSVK"]</label>
                 <InputTextArea @bind-Value="_product.ProductDescriptionSvk" class="form-control" rows="3" />
             </div>
 
             <!-- Category Dropdown -->
             <div class="col-md-6">
-                <label class="form-label fw-bold">Category</label>
+                <label class="form-label fw-bold">@resource["Category"]</label>
                 <InputSelect @bind-Value="_product.ProductCategoryId" class="form-select">
                     <option value="">-- Choose Category --</option>
                     @foreach (var cat in _categories)
@@ -46,20 +47,20 @@
 
             <!-- Price -->
             <div class="col-md-3">
-                <label class="form-label fw-bold">Price</label>
+                <label class="form-label fw-bold">@resource["Price"]</label>
                 <InputNumber @bind-Value="_product.ProductPrice" class="form-control" />
             </div>
 
             <!-- Stock -->
             <div class="col-md-3">
-                <label class="form-label fw-bold">Stock</label>
+                <label class="form-label fw-bold">@resource["Stock"]</label>
                 <InputNumber @bind-Value="_product.ProductStock" class="form-control" />
             </div>
 
             <!-- Action Buttons -->
             <div class="col-12 mt-3 d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">Update Product</button>
-                <button type="button" class="btn btn-danger" @onclick="HandleDelete">Delete Product</button>
+                <button type="submit" class="btn btn-primary">@resource["UpdateProduct"]</button>
+                <button type="button" class="btn btn-danger" @onclick="HandleDelete">@resource["Delete"]</button>
             </div>
         </EditForm>
     </div>

@@ -79,11 +79,74 @@ namespace KanesKitchenClient.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name of category in English.
+        /// </summary>
+        public static string CategoryName {
+            get {
+                return ResourceManager.GetString("CategoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of category in Slovak.
+        /// </summary>
+        public static string CategoryNameSVK {
+            get {
+                return ResourceManager.GetString("CategoryNameSVK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Category.
+        /// </summary>
+        public static string CreateCategory {
+            get {
+                return ResourceManager.GetString("CreateCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description of product in English.
+        /// </summary>
+        public static string CreateDescription {
+            get {
+                return ResourceManager.GetString("CreateDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description of product in Slovak.
+        /// </summary>
+        public static string CreateDescriptionSVK {
+            get {
+                return ResourceManager.GetString("CreateDescriptionSVK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a Product.
+        /// </summary>
+        public static string CreateHeader {
+            get {
+                return ResourceManager.GetString("CreateHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Product.
         /// </summary>
         public static string CreateProductButton {
             get {
                 return ResourceManager.GetString("CreateProductButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
@@ -115,11 +178,65 @@ namespace KanesKitchenClient.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name of product in English.
+        /// </summary>
+        public static string ProductName {
+            get {
+                return ResourceManager.GetString("ProductName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of product in Slovak.
+        /// </summary>
+        public static string ProductNameSVK {
+            get {
+                return ResourceManager.GetString("ProductNameSVK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available Products.
         /// </summary>
         public static string ProductsHeader {
             get {
                 return ResourceManager.GetString("ProductsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Images.
+        /// </summary>
+        public static string SelectImages {
+            get {
+                return ResourceManager.GetString("SelectImages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stock.
+        /// </summary>
+        public static string Stock {
+            get {
+                return ResourceManager.GetString("Stock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit Product.
+        /// </summary>
+        public static string SubmitProduct {
+            get {
+                return ResourceManager.GetString("SubmitProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Changes.
+        /// </summary>
+        public static string UpdateProduct {
+            get {
+                return ResourceManager.GetString("UpdateProduct", resourceCulture);
             }
         }
     }

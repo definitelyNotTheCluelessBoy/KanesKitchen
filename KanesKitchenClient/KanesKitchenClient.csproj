@@ -24,6 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Localization\BasketResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BasketResource.resx</DependentUpon>
+    </Compile>
     <Compile Update="Localization\CommentResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -67,6 +72,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Localization\BasketResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BasketResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localization\BasketResource.sk.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Localization\CommentResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommentResource.Designer.cs</LastGenOutput>
@@ -112,6 +124,9 @@
     <EmbeddedResource Update="Localization\ProductResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProductResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localization\ProductResource.sk.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Localization\RegisterResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -2,8 +2,9 @@
 @using SharedLibrary.Models.Eshop;
 @inject IBasketService BasketService
 @inject NavigationManager NavigationManager
+@inject IStringLocalizer<BasketResource> resource
 
-<h3>Your Basket</h3>
+<h3>@resource["Basket"]</h3>
 
 @if (basketItems == null)
 {
@@ -11,17 +12,17 @@
 }
 else if (!basketItems.Any())
 {
-    <p>Your basket is empty.</p>
+    <p>@resource["Empty"]</p>
 }
 else
 {
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Product Name</th>
-                <th>Amount</th>
-                <th>Total Price</th>
-                <th>Actions</th>
+                <th>@resource["ProductName"]</th>
+                <th>@resource["Amount"]</th>
+                <th>@resource["Price"]</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +49,7 @@ else
                         }
                     </td>
                     <td>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteBasketItem(item))">Delete</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteBasketItem(item))">@resource["Delete"]</button>
                     </td>
                 </tr>
             }

@@ -123,8 +123,29 @@
   <data name="Category" xml:space="preserve">
     <value>Category</value>
   </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Name of category in English</value>
+  </data>
+  <data name="CategoryNameSVK" xml:space="preserve">
+    <value>Name of category in Slovak</value>
+  </data>
+  <data name="CreateCategory" xml:space="preserve">
+    <value>Create Category</value>
+  </data>
+  <data name="CreateDescription" xml:space="preserve">
+    <value>Description of product in English</value>
+  </data>
+  <data name="CreateDescriptionSVK" xml:space="preserve">
+    <value>Description of product in Slovak</value>
+  </data>
+  <data name="CreateHeader" xml:space="preserve">
+    <value>Create a Product</value>
+  </data>
   <data name="CreateProductButton" xml:space="preserve">
     <value>Create Product</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
@@ -135,7 +156,25 @@
   <data name="Price" xml:space="preserve">
     <value>Price</value>
   </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Name of product in English</value>
+  </data>
+  <data name="ProductNameSVK" xml:space="preserve">
+    <value>Name of product in Slovak</value>
+  </data>
   <data name="ProductsHeader" xml:space="preserve">
     <value>Available Products</value>
+  </data>
+  <data name="SelectImages" xml:space="preserve">
+    <value>Select Images</value>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="SubmitProduct" xml:space="preserve">
+    <value>Submit Product</value>
+  </data>
+  <data name="UpdateProduct" xml:space="preserve">
+    <value>Save Changes</value>
   </data>
 </root>

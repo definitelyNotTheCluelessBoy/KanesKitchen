@@ -117,64 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddToBasketButton" xml:space="preserve">
-    <value>Pridaj do košíka</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Počet</value>
   </data>
-  <data name="Category" xml:space="preserve">
-    <value>Kategória</value>
-  </data>
-  <data name="CategoryName" xml:space="preserve">
-    <value>Meno kategórie v Angličtine</value>
-  </data>
-  <data name="CategoryNameSVK" xml:space="preserve">
-    <value>Meno kategórie v Slovenčine</value>
-  </data>
-  <data name="CreateCategory" xml:space="preserve">
-    <value>Vytvoriť Kategóriu</value>
-  </data>
-  <data name="CreateDescription" xml:space="preserve">
-    <value>Pospis produktu v Angličtine</value>
-  </data>
-  <data name="CreateDescriptionSVK" xml:space="preserve">
-    <value>Popis produktu v Slovenčine</value>
-  </data>
-  <data name="CreateHeader" xml:space="preserve">
-    <value>Vytvor Produkt</value>
-  </data>
-  <data name="CreateProductButton" xml:space="preserve">
-    <value>Vytvor produkt</value>
+  <data name="Basket" xml:space="preserve">
+    <value>Váš nákupný kóš</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Zmazať</value>
+    <value>Zmazať z koša</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Popis</value>
-  </data>
-  <data name="ModifyButton" xml:space="preserve">
-    <value>Uprav</value>
+  <data name="Empty" xml:space="preserve">
+    <value>Váš nákupný kóš je prázdny</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Cena</value>
+    <value>Celková cena</value>
   </data>
   <data name="ProductName" xml:space="preserve">
-    <value>Meno Produktu v Angličtine</value>
-  </data>
-  <data name="ProductNameSVK" xml:space="preserve">
-    <value>Meno Produktu v Slovenčine</value>
-  </data>
-  <data name="ProductsHeader" xml:space="preserve">
-    <value>Produkty k dispozicií</value>
-  </data>
-  <data name="SelectImages" xml:space="preserve">
-    <value>Zvoľte obrázky</value>
-  </data>
-  <data name="Stock" xml:space="preserve">
-    <value>Počet kusov na sklad</value>
-  </data>
-  <data name="SubmitProduct" xml:space="preserve">
-    <value>Uložiť produkt</value>
-  </data>
-  <data name="UpdateProduct" xml:space="preserve">
-    <value>Uložiť zmeny</value>
+    <value>Meno Produktu</value>
   </data>
 </root>
