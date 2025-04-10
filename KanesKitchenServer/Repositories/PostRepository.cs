@@ -16,14 +16,14 @@ namespace KanesKitchenServer.Repositories
             _context = context;
         }
 
-        public async Task<GeneralResponse> AddPost(Post post)
+        public async Task<GeneralResponse> AddPostAsync(Post post)
         {
             var savePost = await _context.Posts.AddAsync(post);
             _context.SaveChanges();
             return new GeneralResponse(true, "Post saved.");
         }
 
-        public async Task<GeneralResponse> DeletePost(int postId)
+        public async Task<GeneralResponse> DeletePostAsync(int postId)
         {
             var post = await _context.Posts.Include(p => p.Comments).SingleOrDefaultAsync(p => p.Id == postId);
             if (post != null)
@@ -52,7 +52,7 @@ namespace KanesKitchenServer.Repositories
             return posts;
         }
 
-        public async Task<GeneralResponse> UpdatePost(int postId, string newContent)
+        public async Task<GeneralResponse> UpdatePostAsync(int postId, string newContent)
         {
             var post = await _context.Posts.FindAsync(postId);
             if (post == null)

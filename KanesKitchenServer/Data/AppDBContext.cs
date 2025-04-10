@@ -9,8 +9,7 @@ namespace KanesKitchenServer.Data
     public class AppDBContext : DbContext
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
-        {
-        }
+        {}
 
         public DbSet<Roles> Roles { get; set; }
         public DbSet<User> Users { get; set; }

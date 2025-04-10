@@ -20,7 +20,7 @@ namespace KanesKitchenServer.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetComment([FromRoute] int id) { 
-            var comment = await _comentRepository.GetComment(id);
+            var comment = await _comentRepository.GetCommentAsync(id);
             if (comment == null)
             {
                 return NotFound();
@@ -31,7 +31,7 @@ namespace KanesKitchenServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment([FromRoute] int id)
         {
-            var result = await _comentRepository.DeleteComment(id);
+            var result = await _comentRepository.DeleteCommentAsync(id);
             if (result.Success == false) { return NotFound(result.Message); }
             return Ok(result.Message);
         }
@@ -39,7 +39,7 @@ namespace KanesKitchenServer.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComment([FromRoute] int id, [FromBody] string content)
         {
-            var result = await _comentRepository.UpdateComment(id, content);
+            var result = await _comentRepository.UpdateCommentAsync(id, content);
             if (result.Success == false) return NotFound(result.Message);
             return Ok(result.Message);
         }
@@ -47,7 +47,7 @@ namespace KanesKitchenServer.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] NewCommentDto newComment)
         {
-            var result = await _comentRepository.AddComment(newComment.DtoToComment());
+            var result = await _comentRepository.AddCommentAsync(newComment.DtoToComment());
             if (result.Success == false) return NotFound(result.Message);
             return Ok(result.Message);
         }

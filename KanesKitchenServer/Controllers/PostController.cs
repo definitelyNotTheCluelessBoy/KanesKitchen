@@ -42,7 +42,7 @@ namespace KanesKitchenServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost([FromRoute] int id)
         {
-            var result = await _repository.DeletePost(id);
+            var result = await _repository.DeletePostAsync(id);
             if (result.Success) return Ok(result.Message);
             return BadRequest(result.Message);
         }
@@ -50,7 +50,7 @@ namespace KanesKitchenServer.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePost([FromRoute] int id, [FromBody] string newContent)
         {
-            var result = await _repository.UpdatePost(id, newContent);
+            var result = await _repository.UpdatePostAsync(id, newContent);
             if (result.Success) return Ok(result.Message);
             return BadRequest(result.Message);
         }
@@ -58,7 +58,7 @@ namespace KanesKitchenServer.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromBody] NewPostDto newPost)
         {
-            var result = await _repository.AddPost(newPost.DtoToPost());
+            var result = await _repository.AddPostAsync(newPost.DtoToPost());
             if (result.Success) return Ok(result.Message);
             return BadRequest(result.Message);
         }

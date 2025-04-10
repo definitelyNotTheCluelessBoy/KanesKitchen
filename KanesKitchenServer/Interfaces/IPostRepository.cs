@@ -7,8 +7,8 @@ namespace KanesKitchenServer.Interfaces
     {
         Task<List<Post>> GetPosts();
         Task<Post> GetPostAsync(int postId);
-        Task<GeneralResponse> AddPost(Post post);
-        Task<GeneralResponse> DeletePost(int postId);
-        Task<GeneralResponse> UpdatePost(int postId, string newContent);
+        Task<GeneralResponse> AddPostAsync(Post post);
+        Task<GeneralResponse> DeletePostAsync(int postId);
+        Task<GeneralResponse> UpdatePostAsync(int postId, string newContent);
     }
 }
