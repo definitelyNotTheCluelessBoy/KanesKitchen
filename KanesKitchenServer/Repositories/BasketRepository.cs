@@ -1,6 +1,7 @@
 ﻿using KanesKitchenServer.Data;
 using KanesKitchenServer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.DTOs.EShop;
 using SharedLibrary.Models.Eshop;
 using SharedLibrary.Responses;
 
@@ -14,8 +15,12 @@ namespace KanesKitchenServer.Repositories
             _context = context;
         }
 
-        public async Task<GeneralResponse> AddProductToBasketAsync(int userId, int productId, int amount)
+        public async Task<GeneralResponse> AddProductToBasketAsync(AddProductToBasketDto addProductToBasketDto)
         {
+            int amount = addProductToBasketDto.Amount;
+            int productId = addProductToBasketDto.ProductId;
+            int userId = addProductToBasketDto.UserId;
+
             var user =  await _context.Users.FindAsync(userId);
             if (user == null) { return new GeneralResponse (false,"User not found."); }
             var product = await _context.Products.FindAsync(productId);

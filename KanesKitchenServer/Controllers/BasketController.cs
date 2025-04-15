@@ -25,7 +25,7 @@ namespace KanesKitchenServer.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProductToBasket([FromBody] AddProductToBasketDto addProductToBasketDto)
         {
-            var response = await _basketRepository.AddProductToBasketAsync(addProductToBasketDto.UserId, addProductToBasketDto.ProductId, addProductToBasketDto.Amount);
+            var response = await _basketRepository.AddProductToBasketAsync(addProductToBasketDto);
             if (!response.Success)
             {
                 return BadRequest(response);

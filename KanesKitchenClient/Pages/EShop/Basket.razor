@@ -41,7 +41,7 @@ else
                     <td>
                         @if (item.Product != null && item.Number.HasValue)
                         {
-                            @((item.Number.Value * item.Product.ProductPrice).ToString("C"))
+                            @((item.Number.Value * item.Product.ProductPrice).ToString() + "€")
                         }
                         else
                         {
