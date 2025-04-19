@@ -42,7 +42,7 @@ namespace KanesKitchenServer.Controllers
         [HttpGet("getsas")]
         public async Task<IActionResult> GetSasToken()
         {
-            return Ok(_imageRepository.GetSasToken());
+            return Ok(await _imageRepository.GetSasToken());
         }
     }
 }

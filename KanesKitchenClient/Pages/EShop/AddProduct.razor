@@ -202,7 +202,7 @@
                     var blobServiceClient = new BlobServiceClient(
                         new Uri($"{sasDto.ContainerUrl}?{sasDto.SasToken}"));
 
-                    var containerClient = blobServiceClient.GetBlobContainerClient("");
+                    var containerClient = blobServiceClient.GetBlobContainerClient("pics");
 
                     // 6. Unique blob name
                     var extension = Path.GetExtension(file.Name);

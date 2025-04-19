@@ -26,7 +26,7 @@ namespace KanesKitchenClient.Services.Implementations
         public async Task<GetCommentDto> GetCommentAsync(int id)
         {
             var httpClient = await _httpClient.GetPrivateHttpClient();
-            return await httpClient.GetFromJsonAsync<GetCommentDto>($"{commentServiceRoute}");
+            return await httpClient.GetFromJsonAsync<GetCommentDto>($"{commentServiceRoute}/{id}");
         }
 
         public async Task<HttpResponseMessage> UpdateCommentAsync(int id, string content)
